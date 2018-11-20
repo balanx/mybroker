@@ -5,43 +5,62 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, NumericProperty, ListProperty
 from kivy.clock import Clock
+from functools import partial
 
 
-class AppScreenManager(ScreenManager):
-
-    def __init__(self, **kwargs):
-        super(AppScreenManager, self).__init__(**kwargs)
 
 
-class Menu(Screen):
+class NoteView(Screen):
+    current_index = NumericProperty()
+
+
+
+class Notes(Screen):
     view = ObjectProperty(None)
+    notes = ListProperty()
+    buttons = ListProperty()
+    current_index = NumericProperty()
 
     def __init__(self, **kwargs):
-        super(Menu, self).__init__(**kwargs)
+        super(Notes, self).__init__(**kwargs)
         Clock.schedule_once(self.create_scrollview)
 
     def create_scrollview(self, dt):
-        base = ["element {}".format(i) for i in range(40)]
-        layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
-        layout.bind(minimum_height=layout.setter("height"))
+        self.layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
 
-        for element in base:
-            layout.add_widget(Button(text=element, size=(50, 50), size_hint=(1, None),
-                                     background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
         scrollview = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
-        scrollview.add_widget(layout)
+        scrollview.add_widget(self.layout)
         self.view.add_widget(scrollview)
 
 
-#Builder.load_file("./my.kv")
+    def add_note(self):
+        self.notes.append({'title': 'New ', 'mints': [], 'content': ''})
+        note_index = len(self.notes) - 1
+        self.buttons.append(Button(text=self.notes[note_index]['title'] + str(note_index),
+                                    size=(50, 50), size_hint=(1, None),
+                                    background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
+        self.buttons[note_index].bind(on_release=partial(self.HoldButtonNum, note_index))
+        self.layout.add_widget(self.buttons[note_index])
+
+    def HoldButtonNum(self, x, instance):
+        self.current_index = x
+        self.manager.current = 'noteview'
+        print('Button instance:',  instance)
+        print('Button index in list:',  x)
+
+
+
+
+kv = Builder.load_file("./main.kv")
 
 
 class MainApp(App):
 
     def build(self):
-        return AppScreenManager()
+        return kv
 
 
 if __name__ == '__main__':

@@ -1,10 +1,31 @@
 #:kivy 1.10.0
 
-<AppScreenManager>:
-    Menu:
+ScreenManager:
+    #id: abc
+    Notes:
+        id: notes_screen
+        name: 'notes'
+    NoteView:
+        id: noteview_screen
+        name: 'noteview'
+        current_index: notes_screen.current_index
+        #data: notes_screen.notes
 
-<Menu>:
+
+<NoteView>:
+    #current_index: current_index
+
+    Button:
+        #text: '<'
+        text: str(root.current_index)
+        #text: root.manager.notes_screen.current_index
+        on_release: root.manager.current = 'notes'
+
+
+
+<Notes>:
     view: view
+    #layout: layout
 
     BoxLayout:
         orientation: 'vertical'
@@ -18,7 +39,14 @@
                 color: (1, 1, 1, 1)
                 background_color: (.3, .3, .3, 1)
 
+            Button:
+                text: "+"
+                size_hint_x: None
+                width: self.height * 2
+                on_release: root.add_note()
+
         ScrollView:
             id: view
+
 
 #
