@@ -13,7 +13,7 @@ from functools import partial
 
 
 class NoteView(Screen):
-    current_index = NumericProperty()
+    pass
 
 
 

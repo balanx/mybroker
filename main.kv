@@ -1,15 +1,12 @@
 #:kivy 1.10.0
 
 ScreenManager:
-    #id: abc
     Notes:
         id: notes_screen
         name: 'notes'
     NoteView:
         id: noteview_screen
         name: 'noteview'
-        current_index: notes_screen.current_index
-        #data: notes_screen.notes
 
 
 <NoteView>:
@@ -17,15 +14,14 @@ ScreenManager:
 
     Button:
         #text: '<'
-        text: str(root.current_index)
-        #text: root.manager.notes_screen.current_index
+        #text: str(root.current_index)
+        text: str(root.manager.ids.notes_screen.current_index)
         on_release: root.manager.current = 'notes'
 
 
 
 <Notes>:
     view: view
-    #layout: layout
 
     BoxLayout:
         orientation: 'vertical'
