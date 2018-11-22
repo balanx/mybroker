@@ -42,16 +42,21 @@ class Notes(Screen):
         self.buttons.append(Button(text=self.notes[note_index]['title'] + str(note_index),
                                     size=(50, 50), size_hint=(1, None),
                                     background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
-        self.buttons[note_index].bind(on_release=partial(self.HoldButtonNum, note_index))
+        self.buttons[note_index].bind(on_release=partial(self.HoldButtonNum))
         self.layout.add_widget(self.buttons[note_index])
 
-    def HoldButtonNum(self, x, instance):
-        self.current_index = x
+    def HoldButtonNum(self, instance):
+        self.current_index = self.buttons.index(instance)
         self.manager.current = 'noteview'
         print('Button instance:',  instance)
-        print('Button index in list:',  x)
+        print('Button index in list:',  self.current_index)
 
 
+    def del_note(self):
+        self.layout.remove_widget(self.buttons[self.current_index]);
+        del self.buttons[self.current_index];
+        del self.notes[self.current_index];
+        self.manager.current = 'notes';
 
 
 kv = Builder.load_file("./main.kv")
