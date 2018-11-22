@@ -19,7 +19,7 @@ class NoteView(Screen):
 
 class Notes(Screen):
     view = ObjectProperty(None)
-    notes = ListProperty()
+    data = ListProperty()
     buttons = ListProperty()
     current_index = NumericProperty()
 
@@ -37,9 +37,9 @@ class Notes(Screen):
 
 
     def add_note(self):
-        self.notes.append({'title': 'New ', 'mints': [], 'content': ''})
-        note_index = len(self.notes) - 1
-        self.buttons.append(Button(text=self.notes[note_index]['title'] + str(note_index),
+        self.data.append({'title': 'New ', 'mints': [], 'content': ''})
+        note_index = len(self.data) - 1
+        self.buttons.append(Button(text=self.data[note_index]['title'] + str(note_index),
                                     size=(50, 50), size_hint=(1, None),
                                     background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
         self.buttons[note_index].bind(on_release=partial(self.HoldButtonNum))
@@ -55,7 +55,7 @@ class Notes(Screen):
     def del_note(self):
         self.layout.remove_widget(self.buttons[self.current_index]);
         del self.buttons[self.current_index];
-        del self.notes[self.current_index];
+        del self.data[self.current_index];
         self.manager.current = 'notes';
 
 
