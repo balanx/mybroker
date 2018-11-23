@@ -24,8 +24,8 @@ ScreenManager:
         orientation: 'vertical'
 
         BoxLayout:
-            size: (64, 64)
-            size_hint: (1, None)
+            #size: (64, 64)
+            size_hint: (1, 0.1)
 
             Button:
                 text: "Menu"
@@ -40,6 +40,7 @@ ScreenManager:
 
         ScrollView:
             id: view
+            size_hint: (1, 1)
 
 
 #

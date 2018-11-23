@@ -31,9 +31,9 @@ class ListScreen(Screen):
         self.layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter("height"))
 
-        scrollview = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
-        scrollview.add_widget(self.layout)
-        self.view.add_widget(scrollview)
+        #self.view = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+        self.view.add_widget(self.layout)
+        #self.view.add_widget(scrollview)
 
 
     def add_note(self):
