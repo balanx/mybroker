@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
@@ -28,7 +29,7 @@ class ListScreen(Screen):
         Clock.schedule_once(self.create_scrollview)
 
     def create_scrollview(self, dt):
-        self.layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
+        self.layout = GridLayout(cols=2, spacing=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.view.add_widget(self.layout)
 
@@ -36,11 +37,11 @@ class ListScreen(Screen):
     def add_note(self):
         self.data.append({'title': 'New ', 'mints': [], 'content': ''})
         self.index = len(self.data) - 1
-        self.rows.append(Button(text=self.data[self.index]['title'] + str(self.index),
-                                    size=(50, 50), size_hint=(1, None),
-                                    background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
-        self.rows[self.index].bind(on_release=partial(self.HoldButtonNum))
-        self.layout.add_widget(self.rows[self.index])
+        self.rows.append(Label(text='text', size=(1, Window.height/10), size_hint=(1, None)))
+        self.layout.add_widget(self.rows[-1])
+        self.rows.append(Button(text=self.data[self.index]['title'] + str(self.index), size=(1, Window.height/10), size_hint=(1, None) ))
+        self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
+        self.layout.add_widget(self.rows[-1])
 
     def HoldButtonNum(self, instance):
         self.index = self.rows.index(instance)
@@ -51,8 +52,10 @@ class ListScreen(Screen):
 
     def del_note(self):
         self.layout.remove_widget(self.rows[self.index]);
+        self.layout.remove_widget(self.rows[self.index - 1]);
         del self.rows[self.index];
-        del self.data[self.index];
+        del self.rows[self.index - 1];
+        del self.data[int(self.index / 2)];
         self.manager.current = 'list_screen';
 
 
