@@ -12,19 +12,19 @@ from functools import partial
 
 
 
-class NoteView(Screen):
+class NoteScreen(Screen):
     pass
 
 
 
-class Notes(Screen):
+class ListScreen(Screen):
     view = ObjectProperty(None)
     data = ListProperty()
     buttons = ListProperty()
-    current_index = NumericProperty()
+    index = NumericProperty()
 
     def __init__(self, **kwargs):
-        super(Notes, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         Clock.schedule_once(self.create_scrollview)
 
     def create_scrollview(self, dt):
@@ -38,25 +38,25 @@ class Notes(Screen):
 
     def add_note(self):
         self.data.append({'title': 'New ', 'mints': [], 'content': ''})
-        note_index = len(self.data) - 1
-        self.buttons.append(Button(text=self.data[note_index]['title'] + str(note_index),
+        self.index = len(self.data) - 1
+        self.buttons.append(Button(text=self.data[self.index]['title'] + str(self.index),
                                     size=(50, 50), size_hint=(1, None),
                                     background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
-        self.buttons[note_index].bind(on_release=partial(self.HoldButtonNum))
-        self.layout.add_widget(self.buttons[note_index])
+        self.buttons[self.index].bind(on_release=partial(self.HoldButtonNum))
+        self.layout.add_widget(self.buttons[self.index])
 
     def HoldButtonNum(self, instance):
-        self.current_index = self.buttons.index(instance)
-        self.manager.current = 'noteview'
+        self.index = self.buttons.index(instance)
+        self.manager.current = 'note_screen'
         print('Button instance:',  instance)
-        print('Button index in list:',  self.current_index)
+        print('Button index in list:',  self.index)
 
 
     def del_note(self):
-        self.layout.remove_widget(self.buttons[self.current_index]);
-        del self.buttons[self.current_index];
-        del self.data[self.current_index];
-        self.manager.current = 'notes';
+        self.layout.remove_widget(self.buttons[self.index]);
+        del self.buttons[self.index];
+        del self.data[self.index];
+        self.manager.current = 'list_screen';
 
 
 kv = Builder.load_file("./main.kv")

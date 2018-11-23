@@ -1,24 +1,23 @@
 #:kivy 1.10.0
 
 ScreenManager:
-    Notes:
-        id: notes_screen
-        name: 'notes'
-    NoteView:
-        id: noteview_screen
-        name: 'noteview'
+    ListScreen:
+        id: listv
+        name: 'list_screen'
+    NoteScreen:
+        id: notev
+        name: 'note_screen'
 
 
-<NoteView>:
-    #current_index: current_index
+<NoteScreen>:
 
     Button:
-        text: str(root.manager.ids.notes_screen.current_index)
-        on_release: root.manager.ids.notes_screen.del_note()
+        text: str(root.manager.ids.listv.index)
+        on_release: root.manager.ids.listv.del_note()
 
 
 
-<Notes>:
+<ListScreen>:
     view: view
 
     BoxLayout:
