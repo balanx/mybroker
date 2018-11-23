@@ -20,7 +20,7 @@ class NoteScreen(Screen):
 class ListScreen(Screen):
     view = ObjectProperty(None)
     data = ListProperty()
-    buttons = ListProperty()
+    rows = ListProperty()
     index = NumericProperty()
 
     def __init__(self, **kwargs):
@@ -30,31 +30,28 @@ class ListScreen(Screen):
     def create_scrollview(self, dt):
         self.layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter("height"))
-
-        #self.view = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
         self.view.add_widget(self.layout)
-        #self.view.add_widget(scrollview)
 
 
     def add_note(self):
         self.data.append({'title': 'New ', 'mints': [], 'content': ''})
         self.index = len(self.data) - 1
-        self.buttons.append(Button(text=self.data[self.index]['title'] + str(self.index),
+        self.rows.append(Button(text=self.data[self.index]['title'] + str(self.index),
                                     size=(50, 50), size_hint=(1, None),
                                     background_color=(0.5, 0.5, 0.5, 1), color=(1, 1, 1, 1)))
-        self.buttons[self.index].bind(on_release=partial(self.HoldButtonNum))
-        self.layout.add_widget(self.buttons[self.index])
+        self.rows[self.index].bind(on_release=partial(self.HoldButtonNum))
+        self.layout.add_widget(self.rows[self.index])
 
     def HoldButtonNum(self, instance):
-        self.index = self.buttons.index(instance)
+        self.index = self.rows.index(instance)
         self.manager.current = 'note_screen'
         print('Button instance:',  instance)
         print('Button index in list:',  self.index)
 
 
     def del_note(self):
-        self.layout.remove_widget(self.buttons[self.index]);
-        del self.buttons[self.index];
+        self.layout.remove_widget(self.rows[self.index]);
+        del self.rows[self.index];
         del self.data[self.index];
         self.manager.current = 'list_screen';
 
