@@ -14,7 +14,7 @@ from functools import partial
 
 
 class NoteScreen(Screen):
-    pass
+    view = ObjectProperty(None)
 
 
 

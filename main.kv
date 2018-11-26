@@ -10,10 +10,33 @@ ScreenManager:
 
 
 <NoteScreen>:
+    view: view
 
-    Button:
-        text: str(root.manager.ids.listv.index)
-        on_release: root.manager.ids.listv.del_note()
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint: (1, 0.1)
+
+            Button:
+                text: "<"
+                size_hint_x: None
+                width: self.height
+                on_release: root.manager.current = 'list_screen'
+
+            Label:
+                text: "Strategy"
+
+            Button:
+                text: "x"
+                size_hint_x: None
+                width: self.height
+                text: str(root.manager.ids.listv.index)
+                on_release: root.manager.ids.listv.del_note()
+
+        ScrollView:
+            id: view
+            size_hint: (1, 1)
 
 
 
@@ -28,14 +51,19 @@ ScreenManager:
             size_hint: (1, 0.1)
 
             Button:
-                text: "Menu"
-                color: (1, 1, 1, 1)
-                background_color: (.3, .3, .3, 1)
+                text: "$"
+                size_hint_x: None
+                width: self.height
+
+            Label:
+                text: "My Broker"
+                #color: (1, 1, 1, 1)
+                #background_color: (.3, .3, .3, 1)
 
             Button:
                 text: "+"
                 size_hint_x: None
-                width: self.height * 2
+                width: self.height
                 on_release: root.add_note()
 
         ScrollView:
