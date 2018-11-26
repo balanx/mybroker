@@ -19,7 +19,7 @@
             TextInput:
                 id: textinp
                 text: 'None' if not app.listv.data else app.listv.data[app.listv.note_index]['title']
-                #text: 'None' if not app.listv.note else app.listv.note['title']
+                #text: app.listv.note['title']
                 multiline: False
                 focus: True
                 #on_text: app.listv.edit_note(self.text)

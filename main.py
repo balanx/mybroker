@@ -6,7 +6,7 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty, NumericProperty, ListProperty
+from kivy.properties import ObjectProperty, NumericProperty, ListProperty, DictProperty
 from kivy.clock import Clock
 from functools import partial
 
@@ -24,6 +24,7 @@ class ListScreen(Screen):
     rows = ListProperty()
     index = NumericProperty()
     note_index = NumericProperty()
+    #note = DictProperty({'title': 'New', 'mints': [], 'content': ''})
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -47,10 +48,11 @@ class ListScreen(Screen):
     def HoldButtonNum(self, instance):
         self.index = self.rows.index(instance)
         self.note_index = int(self.index / 2)
+        #self.note = self.data[self.note_index]
         self.manager.current = 'note_screen'
 
-        print('Button instance:',  instance)
-        print('Button index in list:',  self.index)
+        print('Data:',  self.data)
+        print('Button index in list:',  self.index, self.note_index)
 
 
     def del_note(self):
@@ -58,8 +60,12 @@ class ListScreen(Screen):
         self.layout.remove_widget(self.rows[self.index - 1]);
         del self.rows[self.index];
         del self.rows[self.index - 1];
-        del self.data[self.note_index];
         self.manager.current = 'list_screen';
+        if self.data[self.note_index] is self.data[-1]:
+            self.note_index -= 1
+            del self.data[-1];
+        else:
+            del self.data[self.note_index];
 
 
     def edit_note(self, text):
