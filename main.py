@@ -35,11 +35,11 @@ class ListScreen(Screen):
 
 
     def add_note(self):
-        self.data.append({'title': 'New ', 'mints': [], 'content': ''})
+        self.data.append({'title': 'New', 'mints': [], 'content': ''})
         self.index = len(self.data) - 1
         self.rows.append(Label(text='text', size=(1, Window.height/10), size_hint=(1, None)))
         self.layout.add_widget(self.rows[-1])
-        self.rows.append(Button(text=self.data[self.index]['title'] + str(self.index), size=(1, Window.height/10), size_hint=(1, None) ))
+        self.rows.append(Button(text=self.data[self.index]['title'], size=(1, Window.height/10), size_hint=(1, None) ))
         self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
         self.layout.add_widget(self.rows[-1])
 
@@ -57,6 +57,13 @@ class ListScreen(Screen):
         del self.rows[self.index - 1];
         del self.data[int(self.index / 2)];
         self.manager.current = 'list_screen';
+
+
+    def edit_note(self, text):
+        index = int(self.index / 2)
+        self.data[index]['title'] = text
+        self.rows[self.index].text = text
+
 
 
 kv = Builder.load_file("./main.kv")

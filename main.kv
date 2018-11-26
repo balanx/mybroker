@@ -19,19 +19,22 @@ ScreenManager:
             size_hint: (1, 0.1)
 
             Button:
-                text: "<"
+                text: "<<"
                 size_hint_x: None
                 width: self.height
                 on_release: root.manager.current = 'list_screen'
 
-            Label:
-                text: "Strategy"
+            TextInput:
+                text: root.manager.ids.listv.data[int(root.manager.ids.listv.index / 2)]['title'] if root.manager.ids.listv.data else 'None'
+                multiline: False
+                focus: True
+                on_text: root.manager.ids.listv.edit_note(self.text)
 
             Button:
                 text: "x"
                 size_hint_x: None
                 width: self.height
-                text: str(root.manager.ids.listv.index)
+                #text: str(root.manager.ids.listv.index)
                 on_release: root.manager.ids.listv.del_note()
 
         ScrollView:
