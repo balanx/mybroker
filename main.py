@@ -23,6 +23,7 @@ class ListScreen(Screen):
     data = ListProperty()
     rows = ListProperty()
     index = NumericProperty()
+    note_index = NumericProperty()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -45,7 +46,9 @@ class ListScreen(Screen):
 
     def HoldButtonNum(self, instance):
         self.index = self.rows.index(instance)
+        self.note_index = int(self.index / 2)
         self.manager.current = 'note_screen'
+
         print('Button instance:',  instance)
         print('Button index in list:',  self.index)
 
@@ -55,15 +58,14 @@ class ListScreen(Screen):
         self.layout.remove_widget(self.rows[self.index - 1]);
         del self.rows[self.index];
         del self.rows[self.index - 1];
-        del self.data[int(self.index / 2)];
+        del self.data[self.note_index];
         self.manager.current = 'list_screen';
 
 
     def edit_note(self, text):
-        index = int(self.index / 2)
-        self.data[index]['title'] = text
+        self.data[self.note_index]['title'] = text
         self.rows[self.index].text = text
-
+        self.manager.current = 'list_screen';
 
 
 kv = Builder.load_file("./main.kv")
@@ -72,7 +74,13 @@ kv = Builder.load_file("./main.kv")
 class MainApp(App):
 
     def build(self):
-        return kv
+        self.listv = ListScreen(name='list_screen')
+        self.notev = NoteScreen(name='note_screen')
+        root = ScreenManager()
+        root.add_widget(self.listv)
+        root.add_widget(self.notev)
+
+        return root
 
 
 if __name__ == '__main__':
