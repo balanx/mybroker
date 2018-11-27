@@ -1,6 +1,6 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.lang import Builder
+#from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -74,7 +74,7 @@ class ListScreen(Screen):
         self.manager.current = 'list_screen';
 
 
-kv = Builder.load_file("./main.kv")
+#kv = Builder.load_file("./main.kv")
 
 
 class MainApp(App):
