@@ -4,73 +4,84 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty, NumericProperty, ListProperty, DictProperty
 from kivy.clock import Clock
-from functools import partial
+#from functools import partial
 
 
+
+def init_note():
+    return {'title': 'New', 'mints': [], 'content': ''}
 
 
 class NoteScreen(Screen):
     view = ObjectProperty(None)
+    note = DictProperty(init_note())
+
+
+
+class ListRow(BoxLayout):
+    note = DictProperty(init_note())
+
 
 
 
 class ListScreen(Screen):
     view = ObjectProperty(None)
+    notev = ObjectProperty(Screen)
     data = ListProperty()
     rows = ListProperty()
     index = NumericProperty()
-    note_index = NumericProperty()
-    #note = DictProperty({'title': 'New', 'mints': [], 'content': ''})
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(self.create_scrollview)
 
     def create_scrollview(self, dt):
-        self.layout = GridLayout(cols=2, spacing=1, size_hint_y=None)
+        self.layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.view.add_widget(self.layout)
 
+    def get_screen(self):
+        self.notev = self.manager.get_screen('note_screen')
+
 
     def add_note(self):
-        self.data.append({'title': 'New', 'mints': [], 'content': ''})
+        self.data.append(init_note())
         self.index = len(self.data) - 1
-        self.rows.append(Label(text='text', size=(1, Window.height/10), size_hint=(1, None)))
-        self.layout.add_widget(self.rows[-1])
-        self.rows.append(Button(text=self.data[self.index]['title'], size=(1, Window.height/10), size_hint=(1, None) ))
-        self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
+        self.rows.append(ListRow(size=(1, Window.height/10), size_hint=(1, None) ))
+        #self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
         self.layout.add_widget(self.rows[-1])
 
     def HoldButtonNum(self, instance):
         self.index = self.rows.index(instance)
-        self.note_index = int(self.index / 2)
-        #self.note = self.data[self.note_index]
+        #self.notev.note = self.data[self.index]
+        #self.notev.text1 = self.data[self.index]['title']
         self.manager.current = 'note_screen'
 
         print('Data:',  self.data)
-        print('Button index in list:',  self.index, self.note_index)
+        print('Button index in list:',  self.index)
 
 
     def del_note(self):
         self.layout.remove_widget(self.rows[self.index]);
-        self.layout.remove_widget(self.rows[self.index - 1]);
+        #self.layout.remove_widget(self.rows[self.index - 1]);
         del self.rows[self.index];
-        del self.rows[self.index - 1];
+        #del self.rows[self.index - 1];
         self.manager.current = 'list_screen';
-        if self.data[self.note_index] is self.data[-1]:
-            self.note_index -= 1
+        if self.data[self.index] is self.data[-1]:
+            self.index -= 1
             del self.data[-1];
         else:
-            del self.data[self.note_index];
+            del self.data[self.index];
 
 
     def edit_note(self, text):
-        self.data[self.note_index]['title'] = text
-        self.rows[self.index].text = text
+        self.data[self.index]['title'] = text
+        self.rows[self.index].note = self.data[self.index]
         self.manager.current = 'list_screen';
 
 
@@ -85,6 +96,8 @@ class MainApp(App):
         root = ScreenManager()
         root.add_widget(self.listv)
         root.add_widget(self.notev)
+
+        self.listv.get_screen()
 
         return root
 

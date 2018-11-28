@@ -18,8 +18,9 @@
 
             TextInput:
                 id: textinp
-                text: 'None' if not app.listv.data else app.listv.data[app.listv.note_index]['title']
-                #text: app.listv.note['title']
+                text: 'None' if not app.listv.data else app.listv.data[app.listv.index]['title']
+                #text: root.note['title']
+                #text: root.text1
                 multiline: False
                 focus: True
                 #on_text: app.listv.edit_note(self.text)
@@ -35,6 +36,17 @@
             id: view
             size_hint: (1, 1)
 
+
+<ListRow>:
+
+    Button:
+        text: root.note['title']
+        size_hint_x: None
+        width: self.height * 1.5
+        on_release: app.listv.HoldButtonNum(root)
+
+    Label:
+        text: "kv"
 
 
 <ListScreen>:
