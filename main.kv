@@ -14,13 +14,11 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: app.listv.edit_note(textinp.text)
+                on_release: app.listv.edit_note([tex1.text, tex2.text])
 
             TextInput:
-                id: textinp
-                text: 'None' if not app.listv.data else app.listv.data[app.listv.index]['title']
-                #text: root.note['title']
-                #text: root.text1
+                id: tex1
+                text: root.note['title']
                 multiline: False
                 focus: True
                 #on_text: app.listv.edit_note(self.text)
@@ -33,9 +31,9 @@
                 on_release: app.listv.del_note()
 
         TextInput:
-            id: comment
+            id: tex2
             size_hint: (1, 0.1)
-            text: 'comment'
+            text: root.note['comment']
 
         ScrollView:
             id: view

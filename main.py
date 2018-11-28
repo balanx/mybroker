@@ -14,7 +14,7 @@ from kivy.clock import Clock
 
 
 def init_note():
-    return {'title': 'New', 'policy': [], 'comment': ''}
+    return {'title': 'New', 'comment': '', 'policy': []}
 
 
 class NoteScreen(Screen):
@@ -36,11 +36,10 @@ class ListScreen(Screen):
     rows = ListProperty()
     index = NumericProperty()
 
+    scr_name = 'note_screen'
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    def get_screen(self):
-        self.notev = self.manager.get_screen('note_screen')
 
 
     def add_note(self):
@@ -52,10 +51,16 @@ class ListScreen(Screen):
 
     def HoldButtonNum(self, instance):
         self.index = self.rows.index(instance)
-        #self.notev.note = self.data[self.index]
-        #self.notev.text1 = self.data[self.index]['title']
+
+        if self.manager.has_screen(self.scr_name):
+            self.manager.remove_widget(self.manager.get_screen(self.scr_name))
+            #del self.notev
+
+        self.notev = NoteScreen(name=self.scr_name)
+        self.notev.note = self.data[self.index]
+        self.manager.add_widget(self.notev)
         self.manager.transition = SlideTransition(direction='left')
-        self.manager.current = 'note_screen'
+        self.manager.current = self.scr_name
 
         print('Data:',  self.data)
         print('Button index in list:',  self.index)
@@ -63,20 +68,15 @@ class ListScreen(Screen):
 
     def del_note(self):
         self.layout.remove_widget(self.rows[self.index]);
-        #self.layout.remove_widget(self.rows[self.index - 1]);
         del self.rows[self.index];
-        #del self.rows[self.index - 1];
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen';
-        if self.data[self.index] is self.data[-1]:
-            self.index -= 1
-            del self.data[-1];
-        else:
-            del self.data[self.index];
+        del self.data[self.index];
 
 
-    def edit_note(self, text):
-        self.data[self.index]['title'] = text
+    def edit_note(self, data):
+        self.data[self.index]['title'] = data[0]
+        self.data[self.index]['comment'] = data[1]
         self.rows[self.index].note = self.data[self.index]
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen';
@@ -89,12 +89,8 @@ class MainApp(App):
 
     def build(self):
         self.listv = ListScreen(name='list_screen')
-        self.notev = NoteScreen(name='note_screen')
         root = ScreenManager()
         root.add_widget(self.listv)
-        root.add_widget(self.notev)
-
-        self.listv.get_screen()
 
         return root
 
