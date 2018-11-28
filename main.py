@@ -3,7 +3,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 #from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from kivy.uix.gridlayout import GridLayout
+#from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
@@ -30,7 +30,7 @@ class ListRow(BoxLayout):
 
 
 class ListScreen(Screen):
-    view = ObjectProperty(None)
+    layout = ObjectProperty(None)
     notev = ObjectProperty(Screen)
     data = ListProperty()
     rows = ListProperty()
@@ -38,12 +38,6 @@ class ListScreen(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Clock.schedule_once(self.create_scrollview)
-
-    def create_scrollview(self, dt):
-        self.layout = GridLayout(cols=1, spacing=1, size_hint_y=None)
-        self.layout.bind(minimum_height=self.layout.setter("height"))
-        self.view.add_widget(self.layout)
 
     def get_screen(self):
         self.notev = self.manager.get_screen('note_screen')

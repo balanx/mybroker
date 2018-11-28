@@ -50,7 +50,7 @@
 
 
 <ListScreen>:
-    view: view
+    layout: layout
 
     BoxLayout:
         orientation: 'vertical'
@@ -76,8 +76,14 @@
                 on_release: root.add_note()
 
         ScrollView:
-            id: view
             size_hint: (1, 1)
+
+            BoxLayout:
+                id: layout
+                orientation: 'vertical'
+                spacing: 1
+                size_hint_y: None
+                height: self.minimum_height
 
 
 #
