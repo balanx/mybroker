@@ -1,5 +1,5 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 #from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -60,6 +60,7 @@ class ListScreen(Screen):
         self.index = self.rows.index(instance)
         #self.notev.note = self.data[self.index]
         #self.notev.text1 = self.data[self.index]['title']
+        self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'note_screen'
 
         print('Data:',  self.data)
@@ -71,6 +72,7 @@ class ListScreen(Screen):
         #self.layout.remove_widget(self.rows[self.index - 1]);
         del self.rows[self.index];
         #del self.rows[self.index - 1];
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen';
         if self.data[self.index] is self.data[-1]:
             self.index -= 1
@@ -82,6 +84,7 @@ class ListScreen(Screen):
     def edit_note(self, text):
         self.data[self.index]['title'] = text
         self.rows[self.index].note = self.data[self.index]
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen';
 
 
