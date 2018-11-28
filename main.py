@@ -1,3 +1,5 @@
+import json
+from os.path import join, exists
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 #from kivy.lang import Builder
@@ -37,15 +39,32 @@ class ListScreen(Screen):
     index = NumericProperty()
 
     scr_name = 'note_screen'
+    fn = './data.json'
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.load_data()
 
+    def load_data(self):
+        if not exists(self.fn):
+            return
+        with open(self.fn) as fd:
+            data = json.load(fd)
 
-    def add_note(self):
-        self.data.append(init_note())
-        self.index = len(self.data) - 1
+        self.data = data
+        for i in range(len(self.data)):
+            self.add_note(self.data[i])
+
+    def save_data(self):
+        with open(self.fn, 'w') as fd:
+            json.dump(self.data, fd)
+
+    def add_note(self, note=None):
+        if note is None:
+            note = init_note()
+            self.data.append(init_note())
         self.rows.append(ListRow(size=(1, Window.height/10), size_hint=(1, None) ))
+        self.rows[-1].note = note
         #self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
         self.layout.add_widget(self.rows[-1])
 
@@ -67,11 +86,12 @@ class ListScreen(Screen):
 
 
     def del_note(self):
-        self.layout.remove_widget(self.rows[self.index]);
-        del self.rows[self.index];
+        self.layout.remove_widget(self.rows[self.index])
+        del self.rows[self.index]
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'list_screen';
-        del self.data[self.index];
+        self.manager.current = 'list_screen'
+        del self.data[self.index]
+        self.save_data()
 
 
     def edit_note(self, data):
@@ -79,7 +99,8 @@ class ListScreen(Screen):
         self.data[self.index]['comment'] = data[1]
         self.rows[self.index].note = self.data[self.index]
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'list_screen';
+        self.manager.current = 'list_screen'
+        self.save_data()
 
 
 #kv = Builder.load_file("./main.kv")
