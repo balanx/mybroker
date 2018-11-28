@@ -14,7 +14,7 @@ from kivy.clock import Clock
 
 
 def init_note():
-    return {'title': 'New', 'mints': [], 'content': ''}
+    return {'title': 'New', 'policy': [], 'comment': ''}
 
 
 class NoteScreen(Screen):

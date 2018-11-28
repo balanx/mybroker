@@ -32,6 +32,11 @@
                 #text: str(app.listv.index)
                 on_release: app.listv.del_note()
 
+        TextInput:
+            id: comment
+            size_hint: (1, 0.1)
+            text: 'comment'
+
         ScrollView:
             id: view
             size_hint: (1, 1)
