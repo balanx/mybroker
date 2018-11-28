@@ -14,7 +14,7 @@ from kivy.clock import Clock
 
 
 def init_note():
-    return {'title': 'New', 'comment': '', 'policy': []}
+    return {'code': 'New', 'comment': '', 'policy': []}
 
 
 class NoteScreen(Screen):
@@ -75,7 +75,7 @@ class ListScreen(Screen):
 
 
     def edit_note(self, data):
-        self.data[self.index]['title'] = data[0]
+        self.data[self.index]['code'] = data[0]
         self.data[self.index]['comment'] = data[1]
         self.rows[self.index].note = self.data[self.index]
         self.manager.transition = SlideTransition(direction='right')

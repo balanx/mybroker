@@ -18,7 +18,7 @@
 
             TextInput:
                 id: tex1
-                text: root.note['title']
+                text: root.note['code']
                 multiline: False
                 focus: True
                 #on_text: app.listv.edit_note(self.text)
@@ -43,7 +43,7 @@
 <ListRow>:
 
     Button:
-        text: root.note['title']
+        text: root.note['code']
         size_hint_x: None
         width: self.height * 1.5
         on_release: app.listv.HoldButtonNum(root)
