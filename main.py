@@ -34,7 +34,7 @@ class ListRow(BoxLayout):
 class ListScreen(Screen):
     layout = ObjectProperty(None)
     notev = ObjectProperty(Screen)
-    data = ListProperty()
+    fdata = ListProperty()
     rows = ListProperty()
     index = NumericProperty()
 
@@ -46,23 +46,25 @@ class ListScreen(Screen):
         self.load_data()
 
     def load_data(self):
+        self.fdata = [ [],
+                       {'connect': 0}
+                     ]
         if not exists(self.fn):
             return
         with open(self.fn) as fd:
-            data = json.load(fd)
+            self.fdata = json.load(fd)
 
-        self.data = data
-        for i in range(len(self.data)):
-            self.add_note(self.data[i])
+        for i in range(len(self.fdata[0])):
+            self.add_note(self.fdata[0][i])
 
     def save_data(self):
         with open(self.fn, 'w') as fd:
-            json.dump(self.data, fd)
+            json.dump(self.fdata, fd)
 
     def add_note(self, note=None):
         if note is None:
             note = init_note()
-            self.data.append(init_note())
+            self.fdata[0].append(init_note())
         self.rows.append(ListRow(size=(1, Window.height/10), size_hint=(1, None) ))
         self.rows[-1].note = note
         #self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
@@ -76,12 +78,12 @@ class ListScreen(Screen):
             #del self.notev
 
         self.notev = NoteScreen(name=self.scr_name)
-        self.notev.note = self.data[self.index]
+        self.notev.note = self.fdata[0][self.index]
         self.manager.add_widget(self.notev)
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = self.scr_name
 
-        print('Data:',  self.data)
+        print('Data:',  self.fdata)
         print('Button index in list:',  self.index)
 
 
@@ -90,14 +92,14 @@ class ListScreen(Screen):
         del self.rows[self.index]
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen'
-        del self.data[self.index]
+        del self.fdata[0][self.index]
         self.save_data()
 
 
-    def edit_note(self, data):
-        self.data[self.index]['code'] = data[0]
-        self.data[self.index]['comment'] = data[1]
-        self.rows[self.index].note = self.data[self.index]
+    def edit_note(self, text):
+        self.fdata[0][self.index]['code'] = text[0]
+        self.fdata[0][self.index]['comment'] = text[1]
+        self.rows[self.index].note = self.fdata[0][self.index]
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen'
         self.save_data()
