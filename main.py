@@ -7,7 +7,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 #from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.scrollview import ScrollView
+#from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty, NumericProperty, ListProperty, DictProperty
 from kivy.clock import Clock
@@ -16,12 +16,23 @@ from kivy.clock import Clock
 
 
 def init_note():
-    return {'code': 'New', 'comment': '', 'policy': []}
+    return {'code': 'New',
+            'enable': False,
+            'comment': '',
+            'policy': []}
+
+
+
+class NoteRow(BoxLayout):
+    note = DictProperty(init_note())
 
 
 class NoteScreen(Screen):
-    view = ObjectProperty(None)
+    layout = ObjectProperty(None)
     note = DictProperty(init_note())
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 
 
@@ -47,7 +58,7 @@ class ListScreen(Screen):
 
     def load_data(self):
         self.fdata = [ [],
-                       {'connect': 0}
+                       {'connect': False}
                      ]
         if not exists(self.fn):
             return
@@ -67,7 +78,6 @@ class ListScreen(Screen):
             self.fdata[0].append(init_note())
         self.rows.append(ListRow(size=(1, Window.height/10), size_hint=(1, None) ))
         self.rows[-1].note = note
-        #self.rows[-1].bind(on_release=partial(self.HoldButtonNum))
         self.layout.add_widget(self.rows[-1])
 
     def HoldButtonNum(self, instance):
@@ -96,9 +106,8 @@ class ListScreen(Screen):
         self.save_data()
 
 
-    def edit_note(self, text):
-        self.fdata[0][self.index]['code'] = text[0]
-        self.fdata[0][self.index]['comment'] = text[1]
+    def edit_note(self, note):
+        self.fdata[0][self.index] = note
         self.rows[self.index].note = self.fdata[0][self.index]
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen'

@@ -1,8 +1,20 @@
 #:kivy 1.10.0
 
 
+<NoteRow>:
+
+    Label:
+        text: "="
+        size_hint_x: None
+        width: self.height
+
+    Button:
+        text: 'condition'
+        #on_release: app.listv.HoldButtonNum(root)
+
+
 <NoteScreen>:
-    view: view
+    layout: layout
 
     BoxLayout:
         orientation: 'vertical'
@@ -14,14 +26,23 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: app.listv.edit_note([tex1.text, tex2.text])
+                on_release: app.listv.edit_note(root.note)
+
+            Button:
+                text: "~" if root.note['enable'] else '|'
+                size_hint_x: None
+                width: self.height
+                on_release: root.note['enable'] = not root.note['enable']
 
             TextInput:
-                id: tex1
                 text: root.note['code']
                 multiline: False
                 focus: True
-                #on_text: app.listv.edit_note(self.text)
+                on_text: root.note['code'] = self.text
+
+            Button:
+                text: "+"
+                #on_release: app.listv.edit_note([tex1.text, tex2.text])
 
             Button:
                 text: "x"
@@ -30,14 +51,27 @@
                 #text: str(app.listv.index)
                 on_release: app.listv.del_note()
 
-        TextInput:
-            id: tex2
+        BoxLayout:
             size_hint: (1, 0.1)
-            text: root.note['comment']
+
+            Label:
+                text: "Policy"
+                size_hint_x: None
+                width: self.height
+
+            TextInput:
+                text: root.note['comment']
+                on_text: root.note['comment'] = self.text
 
         ScrollView:
-            id: view
             size_hint: (1, 1)
+
+            BoxLayout:
+                id: layout
+                orientation: 'vertical'
+                spacing: 1
+                size_hint_y: None
+                height: self.minimum_height
 
 
 <ListRow>:
