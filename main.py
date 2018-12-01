@@ -19,20 +19,49 @@ def init_note():
     return {'code': 'New',
             'enable': False,
             'comment': '',
-            'policy': []}
+            'policy': [] }
 
+
+def init_policy():
+    return {'expr': ['False'],
+            'enable': False }
 
 
 class NoteRow(BoxLayout):
-    note = DictProperty(init_note())
+    cond = DictProperty(init_policy())
+
+    def __init__(self, notev, **kwargs):
+        super().__init__(**kwargs)
+        self.notev = notev
 
 
 class NoteScreen(Screen):
     layout = ObjectProperty(None)
     note = DictProperty(init_note())
+    rows = ListProperty()
+    index = NumericProperty()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def load_note(self, note):
+        self.note = note
+
+        for i in range(len(self.note['policy'])):
+            self.add_cond(self.note['policy'][i])
+
+    def add_cond(self, cond=None):
+        if cond is None:
+            #cond = init_policy()
+            self.note['policy'].append(init_policy())
+            cond = self.note['policy'][-1]
+        self.rows.append(NoteRow(self))
+        self.rows[-1].cond = cond
+        self.layout.add_widget(self.rows[-1])
+
+    def HoldButtonNum(self, instance):
+        self.index = self.rows.index(instance)
+        self.note['policy'][self.index]['enable'] = not self.note['policy'][self.index]['enable']
 
 
 
@@ -88,7 +117,7 @@ class ListScreen(Screen):
             #del self.notev
 
         self.notev = NoteScreen(name=self.scr_name)
-        self.notev.note = self.fdata[0][self.index]
+        self.notev.load_note(self.fdata[0][self.index])
         self.manager.add_widget(self.notev)
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = self.scr_name
@@ -120,6 +149,8 @@ class ListScreen(Screen):
 class MainApp(App):
 
     def build(self):
+        self.row_height = Window.height / 10
+
         self.listv = ListScreen(name='list_screen')
         root = ScreenManager()
         root.add_widget(self.listv)

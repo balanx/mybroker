@@ -2,15 +2,17 @@
 
 
 <NoteRow>:
+    height: app.row_height
+    size_hint: (1, None)
 
     Label:
-        text: "="
+        text: "~" if root.cond['enable'] else '|'
         size_hint_x: None
         width: self.height
 
     Button:
-        text: 'condition'
-        #on_release: app.listv.HoldButtonNum(root)
+        text: root.cond['expr'][0]
+        on_release: root.notev.HoldButtonNum(root)
 
 
 <NoteScreen>:
@@ -42,7 +44,7 @@
 
             Button:
                 text: "+"
-                #on_release: app.listv.edit_note([tex1.text, tex2.text])
+                on_release: root.add_cond()
 
             Button:
                 text: "x"
