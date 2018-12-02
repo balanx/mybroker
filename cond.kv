@@ -1,0 +1,53 @@
+
+
+<TypeDropDown>:
+    Button:
+        text: 'Time'
+        size_hint_y: None
+        height: app.menu_height
+        on_release: root.select('Time')
+    Button:
+        text: 'Price'
+        size_hint_y: None
+        height: app.menu_height
+        on_release: root.select('Price')
+
+
+<CondScreen>:
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint: (1, 0.1)
+
+            Button:
+                text: "<<"
+                size_hint_x: None
+                width: self.height
+                on_release: print(app.cond, type_sel.text)
+
+            Button:
+                id: enable
+                text: ""
+                on_release: root.toggle_enable(self)
+
+            Button:
+                id: type_sel
+                text: 'Select ...'
+                on_release: root.dropdown.open(self)
+
+            Button:
+                text: "+"
+                on_release: root.add_cond()
+
+            Button:
+                text: "x"
+                size_hint_x: None
+                width: self.height
+                on_release: root.del_cond()
+
+        BoxLayout:
+
+
+#
