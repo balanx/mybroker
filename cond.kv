@@ -1,6 +1,6 @@
+#: import Factory kivy.factory.Factory
 
-
-<TypeDropDown>:
+<MyTypeDropDown@TypeDropDown>:
     Button:
         text: 'Time'
         size_hint_y: None
@@ -35,7 +35,7 @@
             Button:
                 id: type_sel
                 text: 'Select ...'
-                on_release: root.dropdown.open(self)
+                on_release: Factory.MyTypeDropDown().open(self)
 
             Button:
                 text: "+"

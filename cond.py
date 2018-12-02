@@ -16,12 +16,8 @@ def init_cond():
 
 class TypeDropDown(DropDown):
 
-    def __init__(self, button, **kwargs):
-        super().__init__(**kwargs)
-        self.button = button
-
     def on_select(self, data):
-        self.button.text = data
+        self.attach_to.text = data
 
 
 class CondScreen(Screen):
@@ -32,7 +28,7 @@ class CondScreen(Screen):
         super().__init__(**kwargs)
         self.cond = cond
         self.ids.enable.text = "~" if self.cond['enable'] else '|'
-        self.dropdown = TypeDropDown(self.ids.type_sel)
+        #self.dropdown = TypeDropDown(self.ids.type_sel)
         #self.ids.type_sel.bind(on_release = self.dropdown.open)
         #self.dropdown.bind(on_select=lambda instance, x: setattr(self.ids.type_sel, 'text', x))
 
