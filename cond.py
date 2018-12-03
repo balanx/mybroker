@@ -27,10 +27,7 @@ class CondScreen(Screen):
     def __init__(self, cond, **kwargs):
         super().__init__(**kwargs)
         self.cond = cond
-        self.ids.enable.text = "~" if self.cond['enable'] else '|'
-        #self.dropdown = TypeDropDown(self.ids.type_sel)
-        #self.ids.type_sel.bind(on_release = self.dropdown.open)
-        #self.dropdown.bind(on_select=lambda instance, x: setattr(self.ids.type_sel, 'text', x))
+        self.ids.btn_enable.text = "~" if self.cond['enable'] else '|'
 
     def toggle_enable(self, button):
         self.cond['enable'] = not self.cond['enable']

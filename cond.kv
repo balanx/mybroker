@@ -25,15 +25,15 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: print(app.cond, type_sel.text)
+                on_release: print(app.cond, btn_type.text)
 
             Button:
-                id: enable
+                id: btn_enable
                 text: ""
                 on_release: root.toggle_enable(self)
 
             Button:
-                id: type_sel
+                id: btn_type
                 text: 'Select ...'
                 on_release: Factory.MyTypeDropDown().open(self)
 
@@ -47,7 +47,11 @@
                 width: self.height
                 on_release: root.del_cond()
 
-        BoxLayout:
+        Label:
+            text_size: self.size
+            halign: 'left'
+            valign: 'top'
+            text: btn_type.text
 
 
 #
