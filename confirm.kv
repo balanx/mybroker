@@ -1,0 +1,28 @@
+#: import Factory kivy.factory.Factory
+
+<ConfirmPopup>:
+    title: 'Confirm'
+    size_hint_y: None
+    height: app.menu_height * 6
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: 'Are you sure to delete ?'
+
+        BoxLayout:
+            Button:
+                text: 'Yes'
+                size_hint_y: None
+                height: app.menu_height
+                on_release: root.result = True; root.dismiss()
+
+            Button:
+                text: 'No'
+                size_hint_y: None
+                height: app.menu_height
+                on_release: root.result = False; root.dismiss()
+
+
+#
