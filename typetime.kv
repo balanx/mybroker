@@ -1,0 +1,34 @@
+
+
+<TypeTime>:
+    orientation: 'vertical'
+
+    BoxLayout:
+        size_hint: (1, 0.1)
+
+        Label:
+            #size_hint_y: None
+            #height: app.menu_height
+            text: 'Start'
+
+        TextInput:
+            text: 'today'
+
+    BoxLayout:
+        size_hint: (1, 0.1)
+
+        Label:
+            text: 'Hong Long'
+
+        TextInput:
+            text: '1'
+
+    Label:
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+        id: lb_comment
+        text: 'Time'
+
+
+#

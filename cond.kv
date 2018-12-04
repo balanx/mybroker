@@ -1,6 +1,7 @@
 #: import Factory kivy.factory.Factory
 #: include common.kv
 #: include typeprice.kv
+#: include typetime.kv
 
 
 <MyTypeDropDown@TypeDropDown>:
@@ -21,6 +22,7 @@
 
     BoxLayout:
         orientation: 'vertical'
+        #spacing: 1
         id: layout
 
         BoxLayout:
@@ -40,7 +42,7 @@
             Button:
                 id: btn_type
                 text: 'Select ...'
-                on_release: Factory.MyTypeDropDown().open(self)
+                on_release: Factory.MyTypeDropDown(root).open(self)
 
             Button:
                 text: "+"

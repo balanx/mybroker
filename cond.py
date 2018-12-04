@@ -5,18 +5,29 @@ from kivy.core.window import Window
 
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 
 
-import common, typeprice
+import common, typeprice, typetime
 
 
 class TypeDropDown(DropDown):
 
+    def __init__(self, root, **kwargs):
+        super().__init__(**kwargs)
+        self.root = root
+
     def on_select(self, data):
         self.attach_to.text = data
+        self.root.ids.layout.remove_widget(self.root.type)
+        if data == 'Price':
+            self.root.type = typeprice.TypePrice(self.root.cond)
+        else:
+            self.root.type = typetime.TypeTime(self.root.cond)
 
+        self.root.ids.layout.add_widget(self.root.type)
 
 class CondScreen(Screen):
 
@@ -24,7 +35,7 @@ class CondScreen(Screen):
         super().__init__(**kwargs)
         self.cond = cond
         self.ids.btn_enable.text = "~" if self.cond['enable'] else '|'
-        self.type = typeprice.TypePrice(cond)
+        self.type = Label(text='None')
         self.ids.layout.add_widget(self.type)
 
     def toggle_enable(self, button):
