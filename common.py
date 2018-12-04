@@ -9,15 +9,15 @@ from kivy.uix.button import Button
 from kivy.properties import BooleanProperty
 
 
+def init_cond():
+    return {'expr': ['False'],
+            'enable': False }
 
 
 class ConfirmPopup(Popup):
     result = BooleanProperty(False)
 
 
-
-
-kv = Builder.load_file("./confirm.kv")
 
 
 class TestApp(App):
@@ -37,6 +37,8 @@ class TestApp(App):
 
 
 if __name__ == '__main__':
+
+    kv = Builder.load_file("./common.kv")
     TestApp().run()
 
 #

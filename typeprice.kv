@@ -1,0 +1,104 @@
+
+
+<TypePrice>:
+    orientation: 'vertical'
+
+    BoxLayout:
+        size_hint: (1, 0.1)
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: 'Abs'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_abs
+            group: 'g1'
+            on_active: root.on_checkbox1_active(self, 'abs')
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: 'Close'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_close
+            group: 'g1'
+            on_active: root.on_checkbox1_active(self, 'close')
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: 'Open'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_open
+            group: 'g1'
+            on_active: root.on_checkbox1_active(self, 'open')
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: 'Max'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_max
+            group: 'g1'
+            on_active: root.on_checkbox1_active(self, 'max')
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: 'Min'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_min
+            group: 'g1'
+            on_active: root.on_checkbox1_active(self, 'min')
+
+    BoxLayout:
+        size_hint: (1, 0.1)
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: '<'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_abs
+            group: 'g2'
+            on_active: root.on_checkbox2_active(self, '<')
+
+        Label:
+            size_hint_y: None
+            height: app.menu_height
+            text: '>'
+
+        CheckBox:
+            size_hint_y: None
+            height: app.menu_height
+            id: cb_close
+            group: 'g2'
+            on_active: root.on_checkbox2_active(self, '>')
+
+    Label:
+        text_size: self.size
+        halign: 'left'
+        valign: 'top'
+        id: lb_comment
+        text: 'Price'
+
+
+#

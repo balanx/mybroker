@@ -8,11 +8,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 
-#from kivy.properties import BooleanProperty, StringProperty, ListProperty, DictProperty
 
-def init_cond():
-    return {'expr': ['False'],
-            'enable': False }
+import common, typeprice
 
 
 class TypeDropDown(DropDown):
@@ -21,30 +18,13 @@ class TypeDropDown(DropDown):
         self.attach_to.text = data
 
 
-class TypePrice(BoxLayout):
-
-    def __init__(self, cond, **kwargs):
-        super().__init__(**kwargs)
-        self.cond = cond
-
-    def on_checkbox1_active(self, instance, text):
-        if instance.active:
-            print(text)
-
-    def on_checkbox2_active(self, instance, text):
-        if instance.active:
-            print(text)
-
-
 class CondScreen(Screen):
-    #enable = BooleanProperty()
-    #cond = DictProperty(None)
 
     def __init__(self, cond, **kwargs):
         super().__init__(**kwargs)
         self.cond = cond
         self.ids.btn_enable.text = "~" if self.cond['enable'] else '|'
-        self.type = TypePrice(cond)
+        self.type = typeprice.TypePrice(cond)
         self.ids.layout.add_widget(self.type)
 
     def toggle_enable(self, button):
@@ -54,18 +34,17 @@ class CondScreen(Screen):
 
 
 
-kv = Builder.load_file("./cond.kv")
-
-
 class TestApp(App):
 
     def build(self):
         self.menu_height = Window.height / 10
-        self.cond = init_cond()
+        self.cond = common.init_cond()
 
         return CondScreen(self.cond)
 
 if __name__ == '__main__':
+    
+    kv = Builder.load_file("./cond.kv")
     TestApp().run()
 
 #
