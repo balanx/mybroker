@@ -2,13 +2,13 @@
 
 <TypePrice>:
     orientation: 'vertical'
+    spacing: app.row_space
 
     BoxLayout:
-        size_hint: (1, 0.1)
+        size_hint: (1, None)
+        height: app.row_height
 
         Label:
-            #size_hint_y: None
-            #height: app.menu_height
             text: 'Abs'
 
         CheckBox:
@@ -50,11 +50,10 @@
             on_active: root.on_checkbox1_active(self, 'min')
 
     BoxLayout:
-        size_hint: (1, 0.1)
+        size_hint: (1, None)
+        height: app.row_height
 
         Label:
-            #size_hint_y: None
-            #height: app.menu_height
             text: '<'
 
         CheckBox:

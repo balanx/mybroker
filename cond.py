@@ -48,7 +48,8 @@ class CondScreen(Screen):
 class TestApp(App):
 
     def build(self):
-        self.menu_height = Window.height / 10
+        self.row_height = Window.height / 10
+        self.row_space = 10
         self.cond = common.init_cond()
 
         return CondScreen(self.cond)
