@@ -14,16 +14,8 @@
         CheckBox:
             id: cb_abs
             group: 'g1'
-            active: True
-            on_active: root.on_checkbox1_active(self, 'abs')
-
-        Label:
-            text: 'Close'
-
-        CheckBox:
-            id: cb_close
-            group: 'g1'
-            on_active: root.on_checkbox1_active(self, 'close')
+            #active: True
+            on_active: root.on_checkbox_active(self, 1)
 
         Label:
             text: 'Open'
@@ -31,7 +23,15 @@
         CheckBox:
             id: cb_open
             group: 'g1'
-            on_active: root.on_checkbox1_active(self, 'open')
+            on_active: root.on_checkbox_active(self, 2)
+
+        Label:
+            text: 'Close'
+
+        CheckBox:
+            id: cb_close
+            group: 'g1'
+            on_active: root.on_checkbox_active(self, 3)
 
         Label:
             text: 'Max'
@@ -39,7 +39,7 @@
         CheckBox:
             id: cb_max
             group: 'g1'
-            on_active: root.on_checkbox1_active(self, 'max')
+            on_active: root.on_checkbox_active(self, 4)
 
         Label:
             text: 'Min'
@@ -47,28 +47,42 @@
         CheckBox:
             id: cb_min
             group: 'g1'
-            on_active: root.on_checkbox1_active(self, 'min')
+            on_active: root.on_checkbox_active(self, 5)
 
     BoxLayout:
         size_hint: (1, None)
         height: app.row_height
 
         Label:
-            text: '<'
-
-        CheckBox:
-            id: cb_abs
-            group: 'g2'
-            active: True
-            on_active: root.on_checkbox2_active(self, '<')
-
-        Label:
+            id: lb_more
             text: '>'
 
         CheckBox:
-            id: cb_close
+            id: cb_more
             group: 'g2'
-            on_active: root.on_checkbox2_active(self, '>')
+            on_active: root.on_checkbox_active(self, 10)
+
+        Label:
+            id: lb_less
+            text: '<'
+
+        CheckBox:
+            id: cb_less
+            group: 'g2'
+            #active: True
+            on_active: root.on_checkbox_active(self, 11)
+
+    BoxLayout:
+        size_hint: (1, None)
+        height: app.row_height
+
+        Label:
+            text: 'Value'
+
+        TextInput:
+            id: txi_val
+            text: '0'
+            on_text: root.on_text_val(self.text)
 
     Label:
         text_size: self.size

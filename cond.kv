@@ -33,11 +33,12 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: print(app.cond, btn_type.text)
+                #on_release: root.edit_cond(); print(app.cond)
+                on_release: print(app.cond)
 
             Button:
                 id: btn_enable
-                text: ""
+                text: "|"
                 on_release: root.toggle_enable(self)
 
             Label:
