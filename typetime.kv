@@ -12,6 +12,7 @@
             text: 'Start'
 
         TextInput:
+            id: txi_start
             text: 'today'
 
     BoxLayout:
@@ -19,10 +20,12 @@
         height: app.row_height
 
         Label:
-            text: 'How long'
+            text: 'How soon'
 
         TextInput:
-            text: '1'
+            id: txi_limit
+            text: '0'
+            on_text: root.on_text_time(self.text)
 
     Label:
         text_size: self.size

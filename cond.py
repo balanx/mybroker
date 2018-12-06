@@ -10,7 +10,6 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 #from kivy.properties import BooleanProperty, NumericProperty, ListProperty, DictProperty
 
-import datetime as dt
 import common, typeprice, typetime
 
 
@@ -62,11 +61,15 @@ class TestApp(App):
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        self.index = 1
+        self.index = 2
         # Type definition
         # 1: Time
         # 2: Price
-        self.cond = [False, [0, None, None, None], [1, dt.date.today(), 0, None], [2, 5, False, 1.0]]
+        self.cond = [ False,
+                      [0, None, None, None],
+                      [1, common.datetime.date.today(), 0, common.datetime.date.today()],
+                      [2, 5, False, 1.0]
+                    ]
 
         return CondScreen(self.index, self.cond)
 

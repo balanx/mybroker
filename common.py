@@ -8,6 +8,9 @@ from kivy.uix.button import Button
 
 from kivy.properties import BooleanProperty
 
+import datetime
+
+oneday = datetime.timedelta(days=1)
 
 def init_cond():
     return {'expr': ['False'],
