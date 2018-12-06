@@ -38,6 +38,8 @@ class TypePrice(BoxLayout):
                 self.cond[2] = True
             elif n == 11: # less
                 self.cond[2] = False
+        elif self.cond[1] == n:
+            instance.active = True
 
 
 
