@@ -1,0 +1,109 @@
+
+
+<NoteSubRow>:
+    size_hint: (1, None)
+    height: app.row_height
+
+    Label:
+        size_hint_x: None
+        width: self.height
+        text: '*'
+
+    Button:
+        text: 'condition'
+        #on_release: root.notescr.HoldButtonNum(root)
+
+
+<NoteRow>:
+    size_hint: (1, None)
+    height: app.row_height
+
+    Button:
+        size_hint_x: None
+        width: self.height
+        text: '+'
+        on_release: root.notescr.add_subcond(root);print(app.note)
+
+    Button:
+        text: 'condition'
+        #on_release: root.notescr.HoldButtonNum(root)
+
+
+<NoteScreen>:
+    #layout: layout
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: app.row_space
+
+        BoxLayout:
+            size_hint: (1, None)
+            height: app.row_height
+
+            Button:
+                text: "<<"
+                size_hint_x: None
+                width: self.height
+                on_release: app.listv.edit_note(root.note)
+
+            Button:
+                id: btn_enable
+                text: "~"
+                size_hint_x: None
+                width: self.height
+                on_release: root.note['enable'] = not root.note['enable']
+
+            Label:
+                text: 'Note'
+
+            Button:
+                text: "+"
+                on_release: root.add_cond();print(app.note)
+
+            Button:
+                text: "x"
+                size_hint_x: None
+                width: self.height
+                #text: str(app.listv.index)
+                on_release: app.listv.del_note()
+
+        BoxLayout:
+            size_hint: (1, None)
+            height: app.row_height
+
+            Label:
+                text: 'Code'
+                size_hint_x: None
+                width: self.height
+
+            TextInput:
+                id: txi_code
+                text: '0'
+                multiline: False
+                focus: True
+                on_text: root.on_text_code()
+
+        BoxLayout:
+            size_hint: (1, None)
+            height: app.row_height
+
+            Label:
+                text: 'Strategy'
+                size_hint_x: None
+                width: self.height
+
+            Button:
+                id: btn_strategy
+
+        ScrollView:
+            size_hint: (1, 1)
+
+            BoxLayout:
+                id: layout
+                orientation: 'vertical'
+                spacing: app.row_space
+                size_hint_y: None
+                height: self.minimum_height
+
+
+#
