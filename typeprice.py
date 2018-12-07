@@ -36,10 +36,8 @@ class TypePrice(BoxLayout):
                 self.cond[2] = n
             elif n == 10: # more
                 self.cond[3] = True
-            elif n == 11: # less
+            else: # if n == 11: # less
                 self.cond[3] = False
-        elif self.cond[2] == n:
-            instance.active = True
 
 
     def on_text_val(self, text):
