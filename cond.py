@@ -19,31 +19,34 @@ class TypeDropDown(DropDown):
         super().__init__(**kwargs)
         self.root = root
 
-
     def on_select(self, data):
         self.attach_to.text = data
         self.root.ids.layout.remove_widget(self.root.type)
+
         if data == 'Price':
-            self.root.type = typeprice.TypePrice(self.root.subcond)
+            self.root.type = typeprice.TypePrice(self.root.cond)
         else:
-            self.root.type = typetime.TypeTime(self.root.subcond)
+            self.root.type = typetime.TypeTime(self.root.cond)
 
         self.root.ids.layout.add_widget(self.root.type)
 
 
 class CondScreen(Screen):
-    def __init__(self, index, cond, **kwargs):
+
+    #def __init__(self, index, cond, **kwargs):
+    def __init__(self, cond, **kwargs):
         super().__init__(**kwargs)
-        #self.index = index
         self.cond = cond
-        self.subcond = cond[index]
+        #self.subcond = cond[index]
         self.ids.btn_enable.text = "~" if cond[0] else '|'
 
-        if self.subcond[0] == 1:
-            self.type = typetime.TypeTime(self.subcond)
+        #if self.subcond[0] == 1:
+        if cond[1] == 1:
+            self.type = typetime.TypeTime(cond)
             self.ids.btn_type.text = 'Time'
-        elif self.subcond[0] == 2:
-            self.type = typeprice.TypePrice(self.subcond)
+        #elif self.subcond[0] == 2:
+        elif cond[1] == 2:
+            self.type = typeprice.TypePrice(cond)
             self.ids.btn_type.text = 'Price'
         else:
             self.type = Label(text='None')
@@ -61,17 +64,17 @@ class TestApp(App):
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        self.index = 2
+        #self.index = 2
         # Type definition
         # 1: Time
         # 2: Price
-        self.cond = [ False,
-                      [0, None, None, None],
-                      [1, common.datetime.date.today(), 0, common.datetime.date.today()],
-                      [2, 5, False, 1.0]
+        self.cond = [ common.init_cond(),
+                      [False, 1, common.datetime.date.today(), 0, common.datetime.date.today()],
+                      [False, 2, 5, False, 1.0]
                     ]
 
-        return CondScreen(self.index, self.cond)
+        #return CondScreen(self.index, self.cond)
+        return CondScreen(self.cond[0])
 
 
 if __name__ == '__main__':

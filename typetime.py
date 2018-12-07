@@ -10,29 +10,29 @@ class TypeTime(BoxLayout):
         super().__init__(**kwargs)
         self.cond = cond
 
-        if not cond[0] == 1:
-            self.cond[0] = 1
-            self.cond[1] = common.datetime.date.today()
-            self.cond[2] = 0
-            self.cond[3] = common.datetime.date.today()
+        if not cond[1] == 1:
+            cond[1] = 1
+            cond[2] = common.datetime.date.today()
+            cond[3] = 0
+            cond[4] = common.datetime.date.today()
 
-        self.ids.txi_start.text = str(self.cond[1])
-        self.ids.txi_limit.text = str(self.cond[2])
+        self.ids.txi_start.text = str(cond[2])
+        self.ids.txi_limit.text = str(cond[3])
         self.print_comment()
 
 
     def on_text_time(self, text):
         try:
-            self.cond[2] = int(text)
+            self.cond[3] = int(text)
         except:
-            self.cond[2] = 0
+            self.cond[3] = 0
 
-        self.cond[3] = self.cond[1] + common.oneday * self.cond[2]
+        self.cond[4] = self.cond[2] + common.oneday * self.cond[3]
         self.print_comment()
 
 
     def print_comment(self):
-        self.ids.lb_comment.text = 'Deadline is ' + str(self.cond[3])
+        self.ids.lb_comment.text = 'Deadline is ' + str(self.cond[4])
 
 
 #
