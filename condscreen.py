@@ -57,6 +57,10 @@ class CondScreen(Screen):
         self.cond[0] = not self.cond[0]
         button.text = "~" if self.cond[0] else '|'
 
+    def close_cond(self):
+        self.manager.current = 'note_screen'
+        self.manager.remove_widget(self)
+
 
 
 class TestApp(App):

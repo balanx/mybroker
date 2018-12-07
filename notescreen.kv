@@ -1,4 +1,4 @@
-
+#: include condscreen.kv
 
 <NoteSubRow>:
     size_hint: (1, None)
@@ -11,7 +11,7 @@
 
     Button:
         text: 'condition'
-        #on_release: root.notescr.HoldButtonNum(root)
+        on_release: root.wisb.open_cond(root)
 
 
 <NoteRow>:
@@ -22,11 +22,11 @@
         size_hint_x: None
         width: self.height
         text: '+'
-        on_release: root.notescr.add_subcond(root)#;print(app.note)
+        on_release: root.wisb.add_subcond(root)#;print(app.note)
 
     Button:
         text: 'condition'
-        #on_release: root.notescr.HoldButtonNum(root)
+        on_release: root.wisb.open_cond(root)
 
 
 <NoteScreen>:
@@ -51,7 +51,7 @@
                 text: "~"
                 size_hint_x: None
                 width: self.height
-                on_release: root.note['enable'] = not root.note['enable']
+                #on_release: root.note['enable'] = not root.note['enable']
 
             Label:
                 text: 'Note'
