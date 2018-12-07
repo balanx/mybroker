@@ -13,8 +13,7 @@ import datetime
 oneday = datetime.timedelta(days=1)
 
 def init_cond():
-    return {'expr': ['False'],
-            'enable': False }
+    return [False, 0, None, None, None]
 
 
 class ConfirmPopup(Popup):

@@ -1,19 +1,13 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
-#from kivy.uix.button import Button
-#from kivy.uix.label import Label
-#from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-#from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
-#from kivy.properties import ObjectProperty, NumericProperty, ListProperty, DictProperty
 
 import common, cond
 
 
 class NoteSubRow(BoxLayout):
-    #cond = DictProperty()
 
     def __init__(self, notescr, t1, t2, **kwargs):
         super().__init__(**kwargs)
@@ -23,7 +17,6 @@ class NoteSubRow(BoxLayout):
 
 
 class NoteRow(BoxLayout):
-    #cond = DictProperty()
 
     def __init__(self, notescr, t1, **kwargs):
         super().__init__(**kwargs)
@@ -32,11 +25,7 @@ class NoteRow(BoxLayout):
 
 
 class NoteScreen(Screen):
-    #layout = ObjectProperty(None)
-    #note = DictProperty()
-    #rows = ListProperty()
     rows = []
-    #index = NumericProperty()
 
     def __init__(self, note, **kwargs):
         super().__init__(**kwargs)
@@ -60,17 +49,13 @@ class NoteScreen(Screen):
 
     def add_cond(self, cond=None):
         t1 = len(self.note)
-        self.note.append([[]])
+        self.note.append( [common.init_cond()] ) # [[]]
         self.rows.append(NoteRow(self, t1))
         self.ids.layout.add_widget(self.rows[-1])
 
     def add_subcond(self, instance):
-        self.note[instance.t1].insert(-1, [])
+        self.note[instance.t1].insert(-1, common.init_cond() ) # []
         self.refresh_cond()
-
-    #def HoldButtonNum(self, instance):
-    #    self.index = self.rows.index(instance)
-    #    self.note['policy'][self.index]['enable'] = not self.note['policy'][self.index]['enable']
 
 
 
@@ -82,8 +67,8 @@ class TestApp(App):
         self.note = [ False,
                       'sh01',
                       ['Strategy'],
-                      [[False, 0, None, None, None]],
-                      [[False, 0, None, None, None], [False, 2, 5, False, 1.0]]
+                      [common.init_cond()],
+                      [common.init_cond(), [False, 2, 5, False, 1.0]]
                     ]
 
         return NoteScreen(self.note)
