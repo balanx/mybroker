@@ -33,18 +33,14 @@ class TypeDropDown(DropDown):
 
 class CondScreen(Screen):
 
-    #def __init__(self, index, cond, **kwargs):
     def __init__(self, cond, **kwargs):
         super().__init__(**kwargs)
         self.cond = cond
-        #self.subcond = cond[index]
         self.ids.btn_enable.text = "~" if cond[0] else '|'
 
-        #if self.subcond[0] == 1:
         if cond[1] == 1:
             self.type = typetime.TypeTime(cond)
             self.ids.btn_type.text = 'Time'
-        #elif self.subcond[0] == 2:
         elif cond[1] == 2:
             self.type = typeprice.TypePrice(cond)
             self.ids.btn_type.text = 'Price'
@@ -58,6 +54,7 @@ class CondScreen(Screen):
         button.text = "~" if self.cond[0] else '|'
 
     def close_cond(self):
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'note_screen'
         self.manager.remove_widget(self)
 
@@ -68,7 +65,6 @@ class TestApp(App):
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        #self.index = 2
         # Type definition
         # 1: Time
         # 2: Price
@@ -77,7 +73,6 @@ class TestApp(App):
                       [False, 2, 5, False, 1.0]
                     ]
 
-        #return CondScreen(self.index, self.cond)
         return CondScreen(self.cond[0])
 
 
