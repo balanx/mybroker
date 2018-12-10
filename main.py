@@ -9,156 +9,92 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 #from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty, NumericProperty, ListProperty, DictProperty
+from kivy.properties import ObjectProperty, NumericProperty, ListProperty, StringProperty
 from kivy.clock import Clock
 #from functools import partial
 
 
-
-def init_note():
-    return {'code': 'New',
-            'enable': False,
-            'comment': '',
-            'policy': [] }
-
-
-def init_policy():
-    return {'expr': ['False'],
-            'enable': False }
-
-
-class NoteRow(BoxLayout):
-    cond = DictProperty(init_policy())
-
-    def __init__(self, notev, **kwargs):
-        super().__init__(**kwargs)
-        self.notev = notev
-
-
-class NoteScreen(Screen):
-    layout = ObjectProperty(None)
-    note = DictProperty(init_note())
-    rows = ListProperty()
-    index = NumericProperty()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def load_note(self, note):
-        self.note = note
-
-        for i in range(len(self.note['policy'])):
-            self.add_cond(self.note['policy'][i])
-
-    def add_cond(self, cond=None):
-        if cond is None:
-            #cond = init_policy()
-            self.note['policy'].append(init_policy())
-            cond = self.note['policy'][-1]
-        self.rows.append(NoteRow(self))
-        self.rows[-1].cond = cond
-        self.layout.add_widget(self.rows[-1])
-
-    def HoldButtonNum(self, instance):
-        self.index = self.rows.index(instance)
-        self.note['policy'][self.index]['enable'] = not self.note['policy'][self.index]['enable']
-
+import common, notescreen
 
 
 class ListRow(BoxLayout):
-    note = DictProperty(init_note())
+    #note = ListProperty()
 
-
+    def __init__(self, index, wisb, **kwargs):
+        self.wisb = wisb
+        self.note = wisb.fd[index]
+        #print(self.note)
+        super().__init__(**kwargs)
 
 
 class ListScreen(Screen):
-    layout = ObjectProperty(None)
-    notev = ObjectProperty(Screen)
-    fdata = ListProperty()
-    rows = ListProperty()
-    index = NumericProperty()
+    rows = []
 
     scr_name = 'note_screen'
-    fn = './data.json'
 
-    def __init__(self, **kwargs):
+    def __init__(self, fd, **kwargs):
         super().__init__(**kwargs)
-        self.load_data()
+        self.fd = fd
+        self.refresh_list()
 
-    def load_data(self):
-        self.fdata = [ [],
-                       {'connect': False}
-                     ]
-        if not exists(self.fn):
-            return
-        with open(self.fn) as fd:
-            self.fdata = json.load(fd)
-
-        for i in range(len(self.fdata[0])):
-            self.add_note(self.fdata[0][i])
-
-    def save_data(self):
-        with open(self.fn, 'w') as fd:
-            json.dump(self.fdata, fd)
+    def refresh_list(self):
+        self.ids.layout.clear_widgets()
+        self.rows.clear()
+        for i in self.fd[1:]:
+            #print('==dd', i)
+            self.add_note(i)
 
     def add_note(self, note=None):
         if note is None:
-            note = init_note()
-            self.fdata[0].append(init_note())
-        self.rows.append(ListRow(size=(1, Window.height/10), size_hint=(1, None) ))
-        self.rows[-1].note = note
-        self.layout.add_widget(self.rows[-1])
+            self.fd.append(common.init_note())
+        self.rows.append(ListRow(len(self.rows) + 1, self))
+        self.ids.layout.add_widget(self.rows[-1])
 
-    def HoldButtonNum(self, instance):
-        self.index = self.rows.index(instance)
+    def open_note(self, instance):
+        self.index = self.rows.index(instance) + 1
+        print('fd:',  self.fd)
+        print('row index in fd:',  self.index)
 
-        if self.manager.has_screen(self.scr_name):
-            self.manager.remove_widget(self.manager.get_screen(self.scr_name))
-            #del self.notev
+        #if self.manager.has_screen(self.scr_name):
+        #    self.manager.remove_widget(self.manager.get_screen(self.scr_name))
 
-        self.notev = NoteScreen(name=self.scr_name)
-        self.notev.load_note(self.fdata[0][self.index])
-        self.manager.add_widget(self.notev)
+        self.notescr = notescreen.NoteScreen(self.index, self, name=self.scr_name)
+        self.manager.add_widget(self.notescr)
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = self.scr_name
 
-        print('Data:',  self.fdata)
-        print('Button index in list:',  self.index)
 
-
-    def del_note(self):
-        self.layout.remove_widget(self.rows[self.index])
-        del self.rows[self.index]
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'list_screen'
-        del self.fdata[0][self.index]
-        self.save_data()
-
-
-    def edit_note(self, note):
-        self.fdata[0][self.index] = note
-        self.rows[self.index].note = self.fdata[0][self.index]
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'list_screen'
-        self.save_data()
-
-
-#kv = Builder.load_file("./main.kv")
 
 
 class MainApp(App):
+    fn = './data.json'
+    fd = [[False]]
 
     def build(self):
         self.row_height = Window.height / 10
+        self.row_space = 10
+        #self.fd = [ [False], common.init_cond(), , , ]
 
-        self.listv = ListScreen(name='list_screen')
+        self.listscr = ListScreen(self.fd, name='list_screen')
         root = ScreenManager()
-        root.add_widget(self.listv)
+        root.add_widget(self.listscr)
 
         return root
 
+    def load_list(self):
+        if not exists(self.fn):
+            return
+        with open(self.fn) as fd:
+            self.fd = json.load(fd)
+
+    def save_list(self):
+        with open(self.fn, 'w') as fd:
+            json.dump(self.fd, fd)
+
 
 if __name__ == '__main__':
+
+    #kv = Builder.load_file("./main.kv")
     MainApp().run()
 
 #

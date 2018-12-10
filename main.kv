@@ -1,102 +1,38 @@
 #:kivy 1.10.0
-
-
-<NoteRow>:
-    height: app.row_height
-    size_hint: (1, None)
-
-    Label:
-        text: "~" if root.cond['enable'] else '|'
-        size_hint_x: None
-        width: self.height
-
-    Button:
-        text: root.cond['expr'][0]
-        on_release: root.notev.HoldButtonNum(root)
-
-
-<NoteScreen>:
-    layout: layout
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        BoxLayout:
-            size_hint: (1, 0.1)
-
-            Button:
-                text: "<<"
-                size_hint_x: None
-                width: self.height
-                on_release: app.listv.edit_note(root.note)
-
-            Button:
-                text: "~" if root.note['enable'] else '|'
-                size_hint_x: None
-                width: self.height
-                on_release: root.note['enable'] = not root.note['enable']
-
-            TextInput:
-                text: root.note['code']
-                multiline: False
-                focus: True
-                on_text: root.note['code'] = self.text
-
-            Button:
-                text: "+"
-                on_release: root.add_cond()
-
-            Button:
-                text: "x"
-                size_hint_x: None
-                width: self.height
-                #text: str(app.listv.index)
-                on_release: app.listv.del_note()
-
-        BoxLayout:
-            size_hint: (1, 0.1)
-
-            Label:
-                text: "Policy"
-                size_hint_x: None
-                width: self.height
-
-            TextInput:
-                text: root.note['comment']
-                on_text: root.note['comment'] = self.text
-
-        ScrollView:
-            size_hint: (1, 1)
-
-            BoxLayout:
-                id: layout
-                orientation: 'vertical'
-                spacing: 1
-                size_hint_y: None
-                height: self.minimum_height
+#: include notescreen.kv
 
 
 <ListRow>:
+    size_hint: (1, None)
+    height: app.row_height
 
     Button:
-        text: root.note['code']
-        size_hint_x: None
-        width: self.height * 1.5
-        on_release: app.listv.HoldButtonNum(root)
+        text: root.note[1]
+        #text: root.wisb.fd[root.index][1]
+        #size_hint_x: None
+        #width: self.height * 1.5
+        on_release: root.wisb.open_note(root)
 
     Label:
-        text: "kv"
+        text: "max"
+
+    Label:
+        text: "min"
+
+    Label:
+        text: "False"
 
 
 <ListScreen>:
-    layout: layout
+    #layout: layout
 
     BoxLayout:
         orientation: 'vertical'
+        spacing: app.row_space
 
         BoxLayout:
-            #size: (64, 64)
-            size_hint: (1, 0.1)
+            size_hint: (1, None)
+            height: app.row_height
 
             Button:
                 text: "$"
@@ -120,7 +56,7 @@
             BoxLayout:
                 id: layout
                 orientation: 'vertical'
-                spacing: 1
+                spacing: app.row_space
                 size_hint_y: None
                 height: self.minimum_height
 

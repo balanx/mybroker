@@ -15,6 +15,9 @@ oneday = datetime.timedelta(days=1)
 def init_cond():
     return [False, 0, None, None, None]
 
+def init_note():
+    return [False, 'sh01', ['Strategy'], [init_cond()] ]
+
 
 class ConfirmPopup(Popup):
     result = BooleanProperty(False)
