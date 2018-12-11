@@ -1,17 +1,15 @@
 import json
-from os.path import join, exists
+from os.path import exists
+from kivy.utils import platform
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 #from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-#from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-#from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty, NumericProperty, ListProperty, StringProperty
 from kivy.clock import Clock
-#from functools import partial
 
 
 import common, notescreen
@@ -20,16 +18,14 @@ import common, notescreen
 class ListRow(BoxLayout):
     #note = ListProperty()
 
-    def __init__(self, index, wisb, **kwargs):
+    def __init__(self, wisb, index, **kwargs):
         self.wisb = wisb
         self.note = wisb.fd[index]
-        #print(self.note)
         super().__init__(**kwargs)
 
 
 class ListScreen(Screen):
     rows = []
-
     scr_name = 'note_screen'
 
     def __init__(self, fd, **kwargs):
@@ -41,22 +37,18 @@ class ListScreen(Screen):
         self.ids.layout.clear_widgets()
         self.rows.clear()
         for i in self.fd[1:]:
-            #print('==dd', i)
             self.add_note(i)
 
     def add_note(self, note=None):
         if note is None:
             self.fd.append(common.init_note())
-        self.rows.append(ListRow(len(self.rows) + 1, self))
+        self.rows.append(ListRow(self, len(self.rows) + 1))
         self.ids.layout.add_widget(self.rows[-1])
 
     def open_note(self, instance):
         self.index = self.rows.index(instance) + 1
         print('fd:',  self.fd)
         print('row index in fd:',  self.index)
-
-        #if self.manager.has_screen(self.scr_name):
-        #    self.manager.remove_widget(self.manager.get_screen(self.scr_name))
 
         self.notescr = notescreen.NoteScreen(self.index, self, name=self.scr_name)
         self.manager.add_widget(self.notescr)
@@ -65,16 +57,20 @@ class ListScreen(Screen):
 
 
 
-
 class MainApp(App):
-    fn = './data.json'
+    fn = 'mybroker.json'
     fd = [[False]]
 
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        #self.fd = [ [False], common.init_cond(), , , ]
+        #print(platform)
+        if platform == 'android':
+            self.fn = '/storage/emulated/0' + self.fn
+        else:
+            self.fn = './' + self.fn
 
+        #self.fd = [ [False], common.init_cond(), , , ]
         self.listscr = ListScreen(self.fd, name='list_screen')
         root = ScreenManager()
         root.add_widget(self.listscr)

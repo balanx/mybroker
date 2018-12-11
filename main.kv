@@ -3,12 +3,12 @@
 
 
 <ListRow>:
+
     size_hint: (1, None)
     height: app.row_height
 
     Button:
         text: root.note[1]
-        #text: root.wisb.fd[root.index][1]
         #size_hint_x: None
         #width: self.height * 1.5
         on_release: root.wisb.open_note(root)
@@ -24,7 +24,6 @@
 
 
 <ListScreen>:
-    #layout: layout
 
     BoxLayout:
         orientation: 'vertical'
