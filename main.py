@@ -87,7 +87,7 @@ class MainApp(App):
     def load_fd(self):
         #print(platform)
         if platform == 'android':
-            self.fn = '/storage/emulated/0' + self.fn
+            self.fn = '/storage/emulated/0/' + self.fn
         else:
             self.fn = './' + self.fn
 
