@@ -33,11 +33,11 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: root.close_cond()
+                on_release: root.wisb.close_cond(root)
 
             Button:
-                id: btn_enable
-                text: "|"
+                #id: btn_enable
+                text: '~' if root.text[0] else '|'
                 on_release: root.toggle_enable(self)
 
             Label:
@@ -51,7 +51,7 @@
                 text: "x"
                 size_hint_x: None
                 width: self.height
-                on_release: root.del_cond()
+                on_release: root.wisb.del_cond(root)
 
         BoxLayout:
             size_hint: (1, None)

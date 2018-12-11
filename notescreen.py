@@ -9,38 +9,44 @@ import common, condscreen
 
 
 class NoteSubRow(BoxLayout):
+    cond = ListProperty()
 
     def __init__(self, wisb, t1, t2, **kwargs):
-        super().__init__(**kwargs)
         self.wisb = wisb
         self.t1 = t1
         self.t2 = t2
+        self.cond = wisb.note[t1][t2]
+        super().__init__(**kwargs)
 
 
 class NoteRow(BoxLayout):
+    cond = ListProperty()
     t2 = 0
 
     def __init__(self, wisb, t1, **kwargs):
-        super().__init__(**kwargs)
         self.wisb = wisb
         self.t1 = t1
+        self.cond = wisb.note[t1][0]
+        super().__init__(**kwargs)
 
 
 class NoteScreen(Screen):
-    #note = ListProperty()
+    #text = ListProperty()
     rows = []
 
     def __init__(self, wisb, **kwargs):
         self.index = wisb.index
         self.wisb = wisb
-        self.fd = wisb.fd
-        self.note = self.fd[self.index]
-        self.code = self.note[1]
+        #self.fd = wisb.fd
+        self.note = wisb.fd[self.index]
+        self.text = self.note
+        #self.code = self.note[1]
         super().__init__(**kwargs)
         self.refresh_cond()
 
     def refresh_cond(self):
         self.ids.layout.clear_widgets()
+        self.rows.clear()
         # [ False, 'sh01', ['Strategy'], [condition], [], ... ]
         t1 = 3
         for cond in self.note[t1:]:
@@ -65,11 +71,28 @@ class NoteScreen(Screen):
         self.refresh_cond()
 
     def open_cond(self, instance):
-        cond = self.note[instance.t1][instance.t2]
-        self.condscr = condscreen.CondScreen(cond, name='cond_screen')
+        self.t1 = instance.t1
+        self.t2 = instance.t2
+        self.t3 = self.rows.index(instance)
+        cond = self.note[self.t1][self.t2]
+        self.condscr = condscreen.CondScreen(self, name='cond_screen')
         self.manager.add_widget(self.condscr)
+        self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'cond_screen'
 
+    def close_cond(self, instance):
+        self.manager.transition = SlideTransition(direction='right')
+        self.manager.current = 'note_screen'
+        self.manager.remove_widget(self.condscr)
+        self.rows[self.t3].cond = self.note[self.t1][self.t2]
+
+    def del_cond(self, instance):
+        self.close_cond(instance)
+        del self.note[self.t1][self.t2]
+        if len(self.note[self.t1]) == 0:
+            del self.note[self.t1]
+        #print('==dd==', self.note)
+        self.refresh_cond()
 
     def on_text_code(self, text):
         self.note[1] = text
@@ -89,8 +112,7 @@ class TestApp(App):
                       [common.init_cond(), [False, 2, 5, False, 1.0]]
                     ]
 
-        #notescr = NoteScreen(self.note, name='note_screen')
-        notescr = NoteScreen(1, self.fd, name='note_screen')
+        notescr = NoteScreen(name='note_screen')
         root = ScreenManager()
         root.add_widget(notescr)
         return root

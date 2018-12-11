@@ -10,7 +10,7 @@
         text: '*'
 
     Button:
-        text: 'condition'
+        text: str(root.cond)
         on_release: root.wisb.open_cond(root)
 
 
@@ -22,10 +22,10 @@
         size_hint_x: None
         width: self.height
         text: '+'
-        on_release: root.wisb.add_subcond(root)#;print(app.note)
+        on_release: root.wisb.add_subcond(root)
 
     Button:
-        text: 'condition'
+        text: str(root.cond)
         on_release: root.wisb.open_cond(root)
 
 
@@ -43,7 +43,7 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.close_note(); app.save_list()
+                on_release: root.wisb.close_note(); app.save_fd()
 
             Button:
                 id: btn_enable
@@ -57,13 +57,13 @@
 
             Button:
                 text: "+"
-                on_release: root.add_cond()#;print(app.note)
+                on_release: root.add_cond()
 
             Button:
                 text: "x"
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.del_note(); app.save_list()
+                on_release: root.wisb.del_note(); app.save_fd()
 
         BoxLayout:
             size_hint: (1, None)
@@ -76,7 +76,7 @@
 
             TextInput:
                 id: txi_code
-                text: root.note[1]
+                text: root.text[1]
                 multiline: False
                 focus: True
                 on_text: root.on_text_code(self.text)

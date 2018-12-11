@@ -3,46 +3,48 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
 
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.screenmanager import Screen
+from kivy.properties import ListProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
-#from kivy.properties import BooleanProperty, NumericProperty, ListProperty, DictProperty
 
 import common, typeprice, typetime
 
 
 class TypeDropDown(DropDown):
 
-    def __init__(self, root, **kwargs):
+    def __init__(self, wisb, **kwargs):
         super().__init__(**kwargs)
-        self.root = root
+        self.wisb = wisb
 
     def on_select(self, data):
         self.attach_to.text = data
-        self.root.ids.layout.remove_widget(self.root.type)
+        self.wisb.ids.layout.remove_widget(self.wisb.type)
 
         if data == 'Price':
-            self.root.type = typeprice.TypePrice(self.root.cond)
+            self.wisb.type = typeprice.TypePrice(self.wisb.cond)
         else:
-            self.root.type = typetime.TypeTime(self.root.cond)
+            self.wisb.type = typetime.TypeTime(self.wisb.cond)
 
-        self.root.ids.layout.add_widget(self.root.type)
+        self.wisb.ids.layout.add_widget(self.wisb.type)
 
 
 class CondScreen(Screen):
+    text = ListProperty()
 
-    def __init__(self, cond, **kwargs):
+    def __init__(self, wisb, **kwargs):
+        self.wisb = wisb
+        self.cond = wisb.note[wisb.t1][wisb.t2]
+        self.text = self.cond
         super().__init__(**kwargs)
-        self.cond = cond
-        self.ids.btn_enable.text = "~" if cond[0] else '|'
 
-        if cond[1] == 1:
-            self.type = typetime.TypeTime(cond)
+        if self.cond[1] == 1:
+            self.type = typetime.TypeTime(self.cond)
             self.ids.btn_type.text = 'Time'
-        elif cond[1] == 2:
-            self.type = typeprice.TypePrice(cond)
+        elif self.cond[1] == 2:
+            self.type = typeprice.TypePrice(self.cond)
             self.ids.btn_type.text = 'Price'
         else:
             self.type = Label(text='None')
@@ -52,11 +54,14 @@ class CondScreen(Screen):
     def toggle_enable(self, button):
         self.cond[0] = not self.cond[0]
         button.text = "~" if self.cond[0] else '|'
+        print('==1==', self.wisb.note[self.wisb.t1][self.wisb.t2])
 
+    '''
     def close_cond(self):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'note_screen'
         self.manager.remove_widget(self)
+    '''
 
 
 

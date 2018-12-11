@@ -96,7 +96,7 @@ class MainApp(App):
         with open(self.fn) as fd:
             return json.load(fd)
 
-    def save_list(self):
+    def save_fd(self):
         with open(self.fn, 'w') as fd:
             json.dump(self.fd, fd)
 
