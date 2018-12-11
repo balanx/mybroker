@@ -30,11 +30,11 @@ class NoteScreen(Screen):
     #note = ListProperty()
     rows = []
 
-    def __init__(self, index, wisb, **kwargs):
-        self.index = index
+    def __init__(self, wisb, **kwargs):
+        self.index = wisb.index
         self.wisb = wisb
         self.fd = wisb.fd
-        self.note = self.fd[index]
+        self.note = self.fd[self.index]
         self.code = self.note[1]
         super().__init__(**kwargs)
         self.refresh_cond()
@@ -70,18 +70,6 @@ class NoteScreen(Screen):
         self.manager.add_widget(self.condscr)
         self.manager.current = 'cond_screen'
 
-    def close_note(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'list_screen'
-        self.manager.remove_widget(self)
-        self.wisb.refresh_list()
-        print('==dd', self.fd)
-
-    def del_note(self, instance):
-        self.close_note()
-        #del self.wisb.rows[self.index - 1]
-        del self.fd[self.index]
-        self.wisb.refresh_list()
 
     def on_text_code(self, text):
         self.note[1] = text

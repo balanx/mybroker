@@ -2,8 +2,8 @@ import json
 from os.path import exists
 from kivy.utils import platform
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 #from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -16,10 +16,11 @@ import common, notescreen
 
 
 class ListRow(BoxLayout):
-    #note = ListProperty()
+    note = ListProperty()
 
     def __init__(self, wisb, index, **kwargs):
         self.wisb = wisb
+        self.index = index
         self.note = wisb.fd[index]
         super().__init__(**kwargs)
 
@@ -46,42 +47,54 @@ class ListScreen(Screen):
         self.ids.layout.add_widget(self.rows[-1])
 
     def open_note(self, instance):
-        self.index = self.rows.index(instance) + 1
+        self.index = instance.index
         print('fd:',  self.fd)
         print('row index in fd:',  self.index)
 
-        self.notescr = notescreen.NoteScreen(self.index, self, name=self.scr_name)
+        self.notescr = notescreen.NoteScreen(self, name=self.scr_name)
         self.manager.add_widget(self.notescr)
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = self.scr_name
+
+    def close_note(self):
+        self.manager.transition = SlideTransition(direction='right')
+        self.manager.current = 'list_screen'
+        self.manager.remove_widget(self.notescr)
+        self.rows[self.index - 1].note = self.fd[self.index]
+
+    def del_note(self):
+        self.close_note()
+        del self.fd[self.index]
+        self.refresh_list()
 
 
 
 class MainApp(App):
     fn = 'mybroker.json'
-    fd = [[False]]
 
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        #print(platform)
-        if platform == 'android':
-            self.fn = '/storage/emulated/0' + self.fn
-        else:
-            self.fn = './' + self.fn
 
         #self.fd = [ [False], common.init_cond(), , , ]
+        self.fd = self.load_fd()
         self.listscr = ListScreen(self.fd, name='list_screen')
         root = ScreenManager()
         root.add_widget(self.listscr)
 
         return root
 
-    def load_list(self):
+    def load_fd(self):
+        #print(platform)
+        if platform == 'android':
+            self.fn = '/storage/emulated/0' + self.fn
+        else:
+            self.fn = './' + self.fn
+
         if not exists(self.fn):
-            return
+            return [[False]]
         with open(self.fn) as fd:
-            self.fd = json.load(fd)
+            return json.load(fd)
 
     def save_list(self):
         with open(self.fn, 'w') as fd:
