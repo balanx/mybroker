@@ -1,0 +1,60 @@
+#
+
+
+<SettingScreen>:
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: app.row_space
+
+        BoxLayout:
+            size_hint: (1, None)
+            height: app.row_height
+
+            Button:
+                text: "<<"
+                size_hint_x: None
+                width: self.height
+                on_release: root.wisb.close_setting(); app.save_fd()
+
+            Label:
+                text: 'Setting'
+
+            Button:
+                text: "x"
+                size_hint_x: None
+                width: self.height
+                on_release: root.wisb.close_setting()
+
+        ScrollView:
+            size_hint: (1, 1)
+
+            BoxLayout:
+                id: layout
+                orientation: 'vertical'
+                spacing: app.row_space
+                size_hint_y: None
+                height: self.minimum_height
+
+                BoxLayout:
+                    size_hint: (1, None)
+                    height: app.row_height
+
+                    Label:
+                        text: 'Interval'
+                        size_hint_x: None
+                        width: self.height
+
+                    TextInput:
+                        id: txi_code
+                        text: root.text[0]
+                        multiline: False
+                        #focus: True
+                        on_text: root.on_text_interval(self.text)
+
+        Label:
+            size_hint: (1, 0.5)
+            text: 'MyBroker\n\n2018.12.19'
+
+
+#

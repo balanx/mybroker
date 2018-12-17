@@ -1,5 +1,6 @@
 #:kivy 1.10.0
 #: include notescreen.kv
+#: include settingscreen.kv
 
 
 <ListRow>:
@@ -40,15 +41,16 @@
                 text: "$"
                 size_hint_x: None
                 width: self.height
+                on_release: root.open_setting()
 
             Button:
                 size_hint_x: None
                 width: self.height
                 text: "~" if root.text[0] else '|'
-                on_release: root.text[0] = not root.text[0]
+                on_release: root.toggle_enable(not root.text[0])
 
             Label:
-                text: "My Broker"
+                text: "MyBroker"
                 #color: (1, 1, 1, 1)
                 #background_color: (.3, .3, .3, 1)
 

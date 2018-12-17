@@ -37,6 +37,26 @@ class ListRow(BoxLayout):
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
 
 
+class SettingScreen(Screen):
+    text = ['']
+
+    def __init__(self, wisb, **kwargs):
+        self.wisb = wisb
+        self.text[0] = str(self.wisb.fd[0][0])
+        super().__init__(**kwargs)
+
+    def on_text_interval(self, text):
+        try:
+            t = float(text)
+        except:
+            t = 3
+
+        if t < 0.1:
+            self.wisb.fd[0][0] = 0.1
+        else:
+            self.wisb.fd[0][0] = t
+
+
 class ListScreen(Screen):
     text = ListProperty([False])
     rows = []
@@ -44,9 +64,10 @@ class ListScreen(Screen):
 
     def __init__(self, fd, **kwargs):
         self.fd = fd
+        self.interval = fd[0][0]
         super().__init__(**kwargs)
         self.refresh_list()
-        self.rounds()
+        self.event = Clock.schedule_once(self.rounds)
 
     def refresh_list(self):
         self.ids.layout.clear_widgets()
@@ -83,13 +104,31 @@ class ListScreen(Screen):
 
     def rounds(self, dt=None):
         #select = 'sh000001,sz399006'
-        if dt and not self.text[0]: return
         if not self.rows: return
         for i in self.rows:
             d = self.mints.get_one(i.note[1])
             i.show(d)
-            print(d)
+        print(d)
 
+    def open_setting(self):
+        self.manager.transition = SlideTransition(direction='right')
+        self.settingscr = SettingScreen(self, name = 'setting_screen')
+        self.manager.add_widget(self.settingscr)
+        self.manager.current = 'setting_screen'
+
+    def close_setting(self):
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = 'list_screen'
+        self.manager.remove_widget(self.settingscr)
+        self.interval = self.fd[0][0]
+        self.toggle_enable(self.text[0])
+
+    def toggle_enable(self, d):
+        self.text[0] = d
+        if self.event.is_triggered:
+            self.event.cancel()
+        if self.text[0]:
+            self.event = Clock.schedule_interval(self.rounds, self.interval)
 
 #
 
@@ -107,7 +146,6 @@ class MainApp(App):
         root = ScreenManager()
         root.add_widget(listscr)
 
-        Clock.schedule_interval(listscr.rounds, 3.0/1.0)
         return root
 
     def load_fd(self):
@@ -118,7 +156,7 @@ class MainApp(App):
             self.fn = './' + self.fn
 
         if not exists(self.fn):
-            return [[False]]
+            return [[3]]
         with open(self.fn) as fd:
             return json.load(fd)
 
