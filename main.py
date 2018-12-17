@@ -12,7 +12,7 @@ from kivy.properties import ObjectProperty, NumericProperty, ListProperty, Strin
 from kivy.clock import Clock
 
 
-import common, notescreen, stock
+import common, notescreen, settingscreen, stock
 
 
 class ListRow(BoxLayout):
@@ -35,26 +35,6 @@ class ListRow(BoxLayout):
         self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
         self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
-
-
-class SettingScreen(Screen):
-    text = ['']
-
-    def __init__(self, wisb, **kwargs):
-        self.wisb = wisb
-        self.text[0] = str(self.wisb.fd[0][0])
-        super().__init__(**kwargs)
-
-    def on_text_interval(self, text):
-        try:
-            t = float(text)
-        except:
-            t = 3
-
-        if t < 0.1:
-            self.wisb.fd[0][0] = 0.1
-        else:
-            self.wisb.fd[0][0] = t
 
 
 class ListScreen(Screen):
@@ -112,7 +92,7 @@ class ListScreen(Screen):
 
     def open_setting(self):
         self.manager.transition = SlideTransition(direction='right')
-        self.settingscr = SettingScreen(self, name = 'setting_screen')
+        self.settingscr = settingscreen.SettingScreen(self, name = 'setting_screen')
         self.manager.add_widget(self.settingscr)
         self.manager.current = 'setting_screen'
 
