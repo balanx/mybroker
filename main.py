@@ -12,11 +12,12 @@ from kivy.properties import ObjectProperty, NumericProperty, ListProperty, Strin
 from kivy.clock import Clock
 
 
-import common, notescreen
+import common, notescreen, stock
 
 
 class ListRow(BoxLayout):
     note = ListProperty()
+    text = ListProperty(['']*4)
 
     def __init__(self, wisb, index, **kwargs):
         self.wisb = wisb
@@ -24,14 +25,26 @@ class ListRow(BoxLayout):
         self.note = wisb.fd[index]
         super().__init__(**kwargs)
 
+    def format(self, d1, d2):
+        if not d2: return '0'
+        d = 100*(d1-d2)/d2
+        return ('%.2f' % d)
+
+    def show(self, data):
+        self.text[0] = self.note[1] + '\n' + ('%.2f' % data[2]) + '  ' + self.format(data[2], data[3]) + '%'
+        self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
+        self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
+        self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
+
 
 class ListScreen(Screen):
     rows = []
     scr_name = 'note_screen'
+    mints = stock.minites_data()
 
     def __init__(self, fd, **kwargs):
-        super().__init__(**kwargs)
         self.fd = fd
+        super().__init__(**kwargs)
         self.refresh_list()
 
     def refresh_list(self):
@@ -67,6 +80,15 @@ class ListScreen(Screen):
         del self.fd[self.index]
         self.refresh_list()
 
+    def rounds(self, dt):
+        #select = 'sh000001,sz399006'
+        if not self.rows: return
+        for i in self.rows:
+            d = self.mints.get_one(i.note[1])
+            i.show(d)
+            print(d)
+
+#
 
 
 class MainApp(App):
@@ -78,10 +100,11 @@ class MainApp(App):
 
         #self.fd = [ [False], common.init_cond(), , , ]
         self.fd = self.load_fd()
-        self.listscr = ListScreen(self.fd, name='list_screen')
+        listscr = ListScreen(self.fd, name='list_screen')
         root = ScreenManager()
-        root.add_widget(self.listscr)
+        root.add_widget(listscr)
 
+        Clock.schedule_interval(listscr.rounds, 3.0/1.0)
         return root
 
     def load_fd(self):

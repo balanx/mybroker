@@ -22,12 +22,12 @@ class minites_data():
                                 headers=minites_data.headers)
         except :
             print("Error : grabbing() : failed at requests.get(server, , ,)")
-            return ['0'] * 9
+            return [0] * 9
             #sys.exit(0)
         #
         if resp.status_code != 200 :
             print("Error : grabbing() : resp.status_code = ", resp.status_code)
-            return ['0'] * 9
+            return [0] * 9
             #sys.exit(0)
         #
 
@@ -41,7 +41,7 @@ class minites_data():
             r[n] = r[n].replace('="', ',')
             r[n] = r[n].split(',')
             if len(r[n]) == 1 :
-                r[n] = ['0'] * 9
+                r[n] = [0] * 9
             else :
                 # Time format to int()
                 r[n].append( r[n][31].replace('-', '') + r[n][32].replace(':', '') )
@@ -51,28 +51,51 @@ class minites_data():
         return r
     #
 
+    def arrange( self, r ) :
+
+        code = r[0]
+        tm = 0 if not r[-1] else int(r[-1][2:-2])  # time
+        open = float(r[2])
+        close = float(r[3])
+        curr = float(r[4]) # current price
+        max = float(r[5])
+        min = float(r[6])
+        f = [tm, curr, open, close, max, min]
+
+        return f
+
+    def get_one( self, n ) :
+
+        r = self.grab( n )
+        #print('==r==', r)
+        '''
+        code = r[0][0]
+        tm = 0 if not r[i][-1] else int(r[0][-1][2:-2])  # time
+        open = float(r[0][2])
+        close = float(r[0][3])
+        curr = float(r[0][4]) # current price
+        max = float(r[0][5])
+        min = float(r[0][6])
+        f = [tm, curr, open, close, max, min]
+        '''
+        f = self.arrange(r[0])
+
+        return f
+
 
     def get_data( self, select, data ) :
 
         r = self.grab( select )
         #print('==r==', r)
         for i in range(len(r)):
-            code = r[i][0]
-            tm = int(r[i][-1])  # time
-            open = float(r[i][2])
-            close = float(r[i][3])
-            curr = float(r[i][4]) # current price
-            max = float(r[i][5])
-            min = float(r[i][6])
-            f = [tm, curr, open, close, max, min]
+            f = self.arrange(r[i])
 
             if not data[i]: # Null List init
                 data[i].append( f )
-            elif data[i][-1][0] != tm : # Time refresh
+            elif data[i][-1][0] != f[0]: # Time refresh
                 data[i].append( f )
 
             #print(i, data)
-
         return
 
 
@@ -80,12 +103,16 @@ class minites_data():
 if __name__ == '__main__':
     import time
     d = minites_data()
+    '''
     select = 'n1,sh000001,n2,sz399006,n3'
     result = [[], [], [], [], []]
     d.get_data(select, result)
     print( result )
     time.sleep(2)
     d.get_data(select, result)
+    print( result )
+    '''
+    result = d.get_one('sh000001')
     print( result )
 
 

@@ -8,16 +8,19 @@
     height: app.row_height
 
     Button:
-        text: root.note[1]
+        text: root.text[0]
         #size_hint_x: None
         #width: self.height * 1.5
         on_release: root.wisb.open_note(root)
 
     Label:
-        text: "max"
+        text: root.text[1]
 
     Label:
-        text: "min"
+        text: root.text[2]
+
+    Label:
+        text: root.text[3]
 
     Label:
         text: "False"
