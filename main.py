@@ -31,21 +31,22 @@ class ListRow(BoxLayout):
         return ('%.2f' % d)
 
     def show(self, data):
-        self.text[0] = self.note[1] + '\n' + ('%.2f' % data[2]) + '  ' + self.format(data[2], data[3]) + '%'
+        self.text[0] = self.note[1] + '\n' + ('%.2f' % data[2]) + '\n' + self.format(data[2], data[3]) + '%'
         self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
         self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
 
 
 class ListScreen(Screen):
+    text = ListProperty([False])
     rows = []
-    scr_name = 'note_screen'
     mints = stock.minites_data()
 
     def __init__(self, fd, **kwargs):
         self.fd = fd
         super().__init__(**kwargs)
         self.refresh_list()
+        self.rounds()
 
     def refresh_list(self):
         self.ids.layout.clear_widgets()
@@ -64,10 +65,10 @@ class ListScreen(Screen):
         print('fd:',  self.fd)
         print('row index in fd:',  self.index)
 
-        self.notescr = notescreen.NoteScreen(self, name=self.scr_name)
+        self.notescr = notescreen.NoteScreen(self, name='note_screen')
         self.manager.add_widget(self.notescr)
         self.manager.transition = SlideTransition(direction='left')
-        self.manager.current = self.scr_name
+        self.manager.current = 'note_screen'
 
     def close_note(self):
         self.manager.transition = SlideTransition(direction='right')
@@ -80,13 +81,15 @@ class ListScreen(Screen):
         del self.fd[self.index]
         self.refresh_list()
 
-    def rounds(self, dt):
+    def rounds(self, dt=None):
         #select = 'sh000001,sz399006'
+        if dt and not self.text[0]: return
         if not self.rows: return
         for i in self.rows:
             d = self.mints.get_one(i.note[1])
             i.show(d)
             print(d)
+
 
 #
 
@@ -98,7 +101,7 @@ class MainApp(App):
         self.row_height = Window.height / 10
         self.row_space = 10
 
-        #self.fd = [ [False], common.init_cond(), , , ]
+        #self.fd = [ [3], common.init_cond(), , , ]
         self.fd = self.load_fd()
         listscr = ListScreen(self.fd, name='list_screen')
         root = ScreenManager()
