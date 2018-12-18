@@ -7,13 +7,11 @@ import common
 class TypePrice(BoxLayout):
 
     def __init__(self, cond, **kwargs):
-        super().__init__(**kwargs)
         self.cond = cond
         cond[1] = 2
+        super().__init__(**kwargs)
 
-        if cond[2] == 1:
-            self.ids.cb_abs.active = True
-        elif cond[2] == 2:
+        if cond[2] == 2:
             self.ids.cb_open.active = True
         elif cond[2] == 3:
             self.ids.cb_close.active = True
@@ -21,6 +19,8 @@ class TypePrice(BoxLayout):
             self.ids.cb_max.active = True
         elif cond[2] == 5:
             self.ids.cb_min.active = True
+        else: #if cond[2] == 1:
+            self.ids.cb_abs.active = True
 
         if cond[3]:
             self.ids.cb_more.active = True

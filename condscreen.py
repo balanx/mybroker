@@ -54,7 +54,6 @@ class CondScreen(Screen):
     def toggle_enable(self, button):
         self.cond[0] = not self.cond[0]
         button.text = "~" if self.cond[0] else '|'
-        print('==1==', self.wisb.note[self.wisb.t1][self.wisb.t2])
 
     '''
     def close_cond(self):
