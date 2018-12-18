@@ -56,10 +56,6 @@
                 text: 'Note'
 
             Button:
-                text: "+"
-                on_release: root.add_cond()
-
-            Button:
                 text: "x"
                 size_hint_x: None
                 width: self.height
@@ -81,17 +77,9 @@
                 #focus: True
                 on_text: root.on_text_code(self.text)
 
-        BoxLayout:
-            size_hint: (1, None)
-            height: app.row_height
-
-            Label:
-                text: 'Strategy'
-                size_hint_x: None
-                width: self.height
-
             Button:
-                id: btn_strategy
+                text: "+"
+                on_release: root.add_cond()
 
         ScrollView:
             size_hint: (1, 1)
@@ -102,6 +90,18 @@
                 spacing: app.row_space
                 size_hint_y: None
                 height: self.minimum_height
+
+        BoxLayout:
+            size_hint: (1, None)
+            height: app.row_height * 1.5
+
+            Label:
+                text: 'Strategy'
+                size_hint_x: None
+                width: self.height
+
+            Button:
+                text: 'Short Medium Long Term, Trends or Vibration'
 
 
 #
