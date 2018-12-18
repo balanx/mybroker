@@ -97,7 +97,7 @@ class NoteScreen(Screen):
         self.note[1] = text
 
     def cond2str(self, subcond):
-        if not subcond[0]: return 'False'
+        if not subcond[0]: return None
         if subcond[1] == 1: # time
             return '(common.today - common.str2date("' + subcond[2] + '") > ' + str(subcond[3]) + ')'
         elif subcond[1] == 2: # price
@@ -122,11 +122,12 @@ class NoteScreen(Screen):
         for cond in self.note[3:]:
             r += '('
             for i in cond[:]:
-                r += self.cond2str(i) + ' and '
+                t = self.cond2str(i)
+                if t is None: continue
+                r += t + ' and '
 
             r = r[:-5] + ') or '
         r = r[:-4]
-        #print(r)
         self.text[0] = r
         return r
 
