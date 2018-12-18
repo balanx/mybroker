@@ -30,7 +30,7 @@ class ListRow(BoxLayout):
         d = 100*(d1-d2)/d2
         return ('%.2f' % d)
 
-    def show(self, data):
+    def show(self, data=[0]*6):
         self.text[0] = self.note[1] + '\n' + ('%.2f' % data[2]) + '\n' + self.format(data[2], data[3]) + '%'
         self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
         self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
@@ -76,6 +76,7 @@ class ListScreen(Screen):
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.notescr)
         self.rows[self.index - 1].note = self.fd[self.index]
+        self.rows[self.index - 1].show()
 
     def del_note(self):
         self.close_note()
