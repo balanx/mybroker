@@ -65,7 +65,8 @@ class NoteScreen(Screen):
         self.ids.layout.add_widget(self.rows[-1])
 
     def add_subcond(self, instance):
-        self.note[instance.t1].insert(-1, common.init_cond() ) # []
+        length = len(self.note[instance.t1])
+        self.note[instance.t1].insert(length, common.init_cond() ) # []
         self.refresh_cond()
 
     def open_cond(self, instance):
@@ -125,7 +126,7 @@ class NoteScreen(Screen):
 
             r = r[:-5] + ') or '
         r = r[:-4]
-        print(r)
+        #print(r)
         self.text[0] = r
         return r
 
