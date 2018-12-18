@@ -8,9 +8,15 @@ from kivy.uix.button import Button
 
 from kivy.properties import BooleanProperty
 
-import datetime
+import datetime as dt
 
-oneday = datetime.timedelta(days=1)
+oneday = dt.timedelta(days=1)
+today = dt.date.today()
+
+def str2date(t):
+    t = t.split('-')
+    t = dt.date(int(t[0]), int(t[1]), int(t[2]))
+    return t
 
 def init_cond():
     return [False, 0, None, None, None]

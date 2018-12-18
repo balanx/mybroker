@@ -31,16 +31,13 @@ class NoteRow(BoxLayout):
 
 
 class NoteScreen(Screen):
-    #text = ListProperty()
+    text = ListProperty([''])
     rows = []
 
     def __init__(self, wisb, **kwargs):
         self.index = wisb.index
         self.wisb = wisb
-        #self.fd = wisb.fd
         self.note = wisb.fd[self.index]
-        self.text = self.note
-        #self.code = self.note[1]
         super().__init__(**kwargs)
         self.refresh_cond()
 
@@ -59,6 +56,7 @@ class NoteScreen(Screen):
                     self.ids.layout.add_widget(self.rows[-1])
                     t2 += 1
             t1 += 1
+        self.show_cond()
 
     def add_cond(self, cond=None):
         t1 = len(self.note)
@@ -85,17 +83,51 @@ class NoteScreen(Screen):
         self.manager.current = 'note_screen'
         self.manager.remove_widget(self.condscr)
         self.rows[self.t3].cond = self.note[self.t1][self.t2]
+        self.note[2] = self.show_cond()
 
     def del_cond(self, instance):
         self.close_cond(instance)
         del self.note[self.t1][self.t2]
         if len(self.note[self.t1]) == 0:
             del self.note[self.t1]
-        #print('==dd==', self.note)
         self.refresh_cond()
 
     def on_text_code(self, text):
         self.note[1] = text
+
+    def cond2str(self, subcond):
+        if not subcond[0]: return 'False'
+        if subcond[1] == 1: # time
+            return '(common.today - common.str2date("' + subcond[2] + '") > ' + str(subcond[3]) + ')'
+        elif subcond[1] == 2: # price
+            t = ' > ' if subcond[3] else ' < '
+            if subcond[2] == 1:
+                return '(self.p[1]' + t + subcond[4] + ')'
+            elif subcond[2] == 2:
+                return '(self.p[1]' + t + 'self.p[2]*' + str(subcond[4]) + ')'
+            elif subcond[2] == 3:
+                return '(self.p[1]' + t + 'self.p[3]*' + str(subcond[4]) + ')'
+            elif subcond[2] == 4:
+                return '(self.p[1] < ' + 'self.p[4]*' + str(subcond[4]) + ')'
+            elif subcond[2] == 5:
+                return '(self.p[1] > ' + 'self.p[5]*' + str(subcond[4]) + ')'
+            else:
+                return 'False'
+        else:
+            return 'False'
+
+    def show_cond(self):
+        r = ''
+        for cond in self.note[3:]:
+            r += '('
+            for i in cond[:]:
+                r += self.cond2str(i) + ' and '
+
+            r = r[:-5] + ') or '
+        r = r[:-4]
+        print(r)
+        self.text[0] = r
+        return r
 
 
 

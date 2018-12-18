@@ -71,8 +71,8 @@
                 width: self.height
 
             TextInput:
-                id: txi_code
-                text: root.text[1]
+                #id: txi_code
+                text: root.note[1]
                 multiline: False
                 #focus: True
                 on_text: root.on_text_code(self.text)
@@ -101,7 +101,10 @@
                 width: self.height
 
             Button:
-                text: 'Short Medium Long Term, Trends or Vibration'
+                #text: 'Short Medium Long Term, Trends or Vibration'
+                text_size: self.size
+                valign: 'middle'
+                text: str(root.text[0])
 
 
 #
