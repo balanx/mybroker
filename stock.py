@@ -22,12 +22,12 @@ class minites_data():
                                 headers=minites_data.headers)
         except :
             print("Error : grabbing() : failed at requests.get(server, , ,)")
-            return [0] * 9
+            return [[0] * 9]
             #sys.exit(0)
         #
         if resp.status_code != 200 :
             print("Error : grabbing() : resp.status_code = ", resp.status_code)
-            return [0] * 9
+            return [[0] * 9]
             #sys.exit(0)
         #
 
@@ -68,16 +68,6 @@ class minites_data():
 
         r = self.grab( n )
         #print('==r==', r)
-        '''
-        code = r[0][0]
-        tm = 0 if not r[i][-1] else int(r[0][-1][2:-2])  # time
-        open = float(r[0][2])
-        close = float(r[0][3])
-        curr = float(r[0][4]) # current price
-        max = float(r[0][5])
-        min = float(r[0][6])
-        f = [tm, curr, open, close, max, min]
-        '''
         f = self.arrange(r[0])
 
         return f
