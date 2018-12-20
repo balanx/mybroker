@@ -16,8 +16,8 @@ import common, notescreen, settingscreen, stock
 
 
 class ListRow(BoxLayout):
-    note = ListProperty()
-    text = ListProperty(['']*4)
+    #note = ListProperty()
+    text = ListProperty(['']*5)
 
     def __init__(self, wisb, index, **kwargs):
         self.wisb = wisb
@@ -35,6 +35,13 @@ class ListRow(BoxLayout):
         self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
         self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
+        if not self.note[0]:
+            self.text[4] = 'Stop'
+        elif len(self.note[2]) > 1:
+            self.text[4] = str(self.note[2][1:])
+        else:
+            self.text[4] = 'None'
+        #print('==d==', self.note)
 
 
 class ListScreen(Screen):
@@ -86,10 +93,15 @@ class ListScreen(Screen):
     def rounds(self, dt=None):
         #select = 'sh000001,sz399006'
         if not self.rows: return
+        n = 1
         for i in self.rows:
-            d = self.mints.get_one(i.note[1])
-            i.show(d)
-        print(d)
+            mqt = self.mints.get_one(i.note[1]) # mintes quoto
+            i.show(mqt)
+            t = self.fd[n][2]
+            #print(t[0])
+            if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
+                t.append(mqt[0])
+            n += 1
 
     def open_setting(self):
         self.manager.transition = SlideTransition(direction='right')

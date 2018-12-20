@@ -84,7 +84,7 @@ class NoteScreen(Screen):
         self.manager.current = 'note_screen'
         self.manager.remove_widget(self.condscr)
         self.rows[self.t3].cond = self.note[self.t1][self.t2]
-        self.note[2] = self.show_cond()
+        self.note[2][0] = self.show_cond()
 
     def del_cond(self, instance):
         self.close_cond(instance)
@@ -103,15 +103,15 @@ class NoteScreen(Screen):
         elif subcond[1] == 2: # price
             t = ' > ' if subcond[3] else ' < '
             if subcond[2] == 1:
-                return '(self.p[1]' + t + subcond[4] + ')'
+                return '(mqt[1]' + t + str(subcond[4]) + ')'
             elif subcond[2] == 2:
-                return '(self.p[1]' + t + 'self.p[2]*' + str(subcond[4]) + ')'
+                return '(mqt[1]' + t + 'mqt[2]*' + str(subcond[4]) + ')'
             elif subcond[2] == 3:
-                return '(self.p[1]' + t + 'self.p[3]*' + str(subcond[4]) + ')'
+                return '(mqt[1]' + t + 'mqt[3]*' + str(subcond[4]) + ')'
             elif subcond[2] == 4:
-                return '(self.p[1] < ' + 'self.p[4]*' + str(subcond[4]) + ')'
+                return '(mqt[1] < ' + 'mqt[4]*' + str(subcond[4]) + ')'
             elif subcond[2] == 5:
-                return '(self.p[1] > ' + 'self.p[5]*' + str(subcond[4]) + ')'
+                return '(mqt[1] > ' + 'mqt[5]*' + str(subcond[4]) + ')'
             else:
                 return 'False'
         else:
