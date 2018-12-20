@@ -37,10 +37,10 @@ class ListRow(BoxLayout):
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
         if not self.note[0]:
             self.text[4] = 'Stop'
-        elif len(self.note[2]) > 1:
-            self.text[4] = str(self.note[2][1:])
+        #elif len(self.note[2]) > 1:
+        #    self.text[4] = str(self.note[2][1:])
         else:
-            self.text[4] = 'None'
+            self.text[4] = str(len(self.note[2]) - 1)
         #print('==d==', self.note)
 
 
@@ -49,9 +49,10 @@ class ListScreen(Screen):
     rows = []
     mints = stock.minites_data()
 
-    def __init__(self, fd, **kwargs):
-        self.fd = fd
-        self.interval = fd[0][0]
+    def __init__(self, wisb, **kwargs):
+        self.app = wisb
+        self.fd = wisb.fd
+        self.interval = self.fd[0][0]
         super().__init__(**kwargs)
         self.refresh_list()
         self.event = Clock.schedule_once(self.rounds)
@@ -101,6 +102,7 @@ class ListScreen(Screen):
             #print(t[0])
             if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
                 t.append(mqt[0])
+                self.app.save_fd()
             n += 1
 
     def open_setting(self):
@@ -135,7 +137,7 @@ class MainApp(App):
 
         #self.fd = [ [3], common.init_cond(), , , ]
         self.fd = self.load_fd()
-        listscr = ListScreen(self.fd, name='list_screen')
+        listscr = ListScreen(self, name='list_screen')
         root = ScreenManager()
         root.add_widget(listscr)
 

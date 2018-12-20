@@ -84,7 +84,7 @@ class NoteScreen(Screen):
         self.manager.current = 'note_screen'
         self.manager.remove_widget(self.condscr)
         self.rows[self.t3].cond = self.note[self.t1][self.t2]
-        self.note[2][0] = self.show_cond()
+        self.show_cond()
 
     def del_cond(self, instance):
         self.close_cond(instance)
@@ -128,8 +128,8 @@ class NoteScreen(Screen):
 
             r = r[:-5] + ') or '
         r = r[:-4]
-        self.text[0] = r
-        return r
+        self.note[2][0] = r
+        self.text[0] = self.note[2]
 
 
 
