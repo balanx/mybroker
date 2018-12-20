@@ -44,7 +44,7 @@ class NoteScreen(Screen):
     def refresh_cond(self):
         self.ids.layout.clear_widgets()
         self.rows.clear()
-        # [ False, 'sh01', ['Strategy'], [condition], [], ... ]
+        # [ False, 'sh01', ['Log'], [condition], [], ... ]
         t1 = 3
         for cond in self.note[t1:]:
             self.rows.append(NoteRow(self, t1))
@@ -138,10 +138,10 @@ class TestApp(App):
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        self.fd = [[False], [False, 'sh01', ['Strategy'], [[False, 0, None, None, None]]]]
+        self.fd = [[False], [False, 'sh01', ['False'], [[False, 0, None, None, None]]]]
         self.note = [ False,
                       'sh01',
-                      ['Strategy'],
+                      ['False'],
                       [common.init_cond()],
                       [common.init_cond(), [False, 2, 5, False, 1.0]]
                     ]

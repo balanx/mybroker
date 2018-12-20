@@ -22,7 +22,7 @@ def init_cond():
     return [False, 0, None, None, None]
 
 def init_note():
-    return [False, 'sh01', ['Strategy'], [init_cond()] ]
+    return [False, 'sh01', ['False'], [init_cond()] ]
 
 
 class ConfirmPopup(Popup):
