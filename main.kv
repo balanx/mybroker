@@ -54,7 +54,7 @@
                 size_hint_x: None
                 width: self.height
                 text: "~" if root.text[0] else '|'
-                on_release: root.toggle_enable(not root.text[0])
+                on_release: root.toggle_enable()
 
             Label:
                 text: "MyBroker"

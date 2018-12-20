@@ -28,6 +28,7 @@ class ListRow(BoxLayout):
         self.index = index
         self.note = wisb.fd[index]
         super().__init__(**kwargs)
+        self.show()
 
     def format(self, d1, d2):
         if not d2: return '0'
@@ -59,7 +60,7 @@ class ListScreen(Screen):
         self.interval = self.fd[0][0]
         super().__init__(**kwargs)
         self.refresh_list()
-        self.event = Clock.schedule_once(self.rounds)
+        #self.event = Clock.schedule_once(self.rounds)
 
     def refresh_list(self):
         self.ids.layout.clear_widgets()
@@ -108,6 +109,8 @@ class ListScreen(Screen):
                 t.append(mqt[0])
                 self.app.save_fd()
             n += 1
+        #print('rounds ...')
+
 
     def open_setting(self):
         self.manager.transition = SlideTransition(direction='right')
@@ -120,14 +123,16 @@ class ListScreen(Screen):
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.settingscr)
         self.interval = self.fd[0][0]
-        self.toggle_enable(self.text[0])
-
-    def toggle_enable(self, d):
-        self.text[0] = d
-        if self.event.is_triggered:
+        if self.text[0]:
             self.event.cancel()
+            self.event = Clock.schedule_interval(self.rounds, self.interval)
+
+    def toggle_enable(self):
+        self.text[0] = not self.text[0]
         if self.text[0]:
             self.event = Clock.schedule_interval(self.rounds, self.interval)
+        elif self.event.is_triggered:
+            self.event.cancel()
 
 #
 
