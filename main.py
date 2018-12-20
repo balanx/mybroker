@@ -1,3 +1,7 @@
+#
+# Copyright (C) 2018 tobalanx@qq.com
+#
+
 import json
 from os.path import exists
 from kivy.utils import platform

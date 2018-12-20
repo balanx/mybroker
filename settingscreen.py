@@ -1,3 +1,6 @@
+#
+# Copyright (C) 2018 tobalanx@qq.com
+#
 
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 
