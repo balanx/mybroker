@@ -99,7 +99,7 @@ class NoteScreen(Screen):
     def cond2str(self, subcond):
         if not subcond[0]: return None
         if subcond[1] == 1: # time
-            return 'common.today - common.str2date("' + subcond[2] + '") > ' + str(subcond[3])
+            return '(common.today - common.str2date("' + subcond[2] + '")).days > ' + str(subcond[3])
         elif subcond[1] == 2: # price
             t = ' > ' if subcond[3] else ' < '
             if subcond[2] == 1:
