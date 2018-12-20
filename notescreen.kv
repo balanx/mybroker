@@ -46,11 +46,10 @@
                 on_release: root.wisb.close_note(); app.save_fd()
 
             Button:
-                id: btn_enable
-                text: "~"
+                text: '~' if root.note[0] else '|'
                 size_hint_x: None
                 width: self.height
-                #on_release: text
+                on_release: root.note[0] = not root.note[0]; self.text = '~' if root.note[0] else '|'
 
             Label:
                 text: 'Note'
