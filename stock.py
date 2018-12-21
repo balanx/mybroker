@@ -39,18 +39,17 @@ class minites_data():
         r.pop()  # delete the last ''
         #print('==1==', r)
 
-        n = 0
-        for i in r :
-            r[n] = i[11:-5]
-            r[n] = r[n].replace('="', ',')
-            r[n] = r[n].split(',')
-            if len(r[n]) == 1 :
-                r[n] = [0] * 9
+        for i in range(len(r)):
+            r[i] = r[i][11:-4]
+            r[i] = r[i].replace('="', ',')
+            r[i] = r[i].split(',')
+            if len(r[i]) == 1 :
+                r[i] += [0] * 8
             else :
+                r[i].pop()
                 # Time format to int()
-                r[n].append( r[n][31].replace('-', '') + r[n][32].replace(':', '') )
+                r[i].append( r[i][31].replace('-', '') + r[i][32].replace(':', '') )
 
-            n += 1
         #
         return r
     #
@@ -58,13 +57,13 @@ class minites_data():
     def arrange( self, r ) :
 
         code = r[0]
-        tm = 0 if not r[-1] else int(r[-1][2:-2])  # time
+        tm = 0 if not r[-1] else int(r[-1])  # time
         open = float(r[2])
         close = float(r[3])
         curr = float(r[4]) # current price
         max = float(r[5])
         min = float(r[6])
-        f = [tm, curr, open, close, max, min]
+        f = [code, tm, curr, open, close, max, min]
 
         return f
 
@@ -74,22 +73,23 @@ class minites_data():
         #print('==r==', r)
         f = self.arrange(r[0])
 
-        return f
+        return f[1:]
 
 
-    def get_data( self, select, data ) :
+    def gets( self, select, data ) :
 
         r = self.grab( select )
         #print('==r==', r)
+        t = len(data)
         for i in range(len(r)):
             f = self.arrange(r[i])
+            #print('==d==', n, f, data[n])
 
-            if not data[i]: # Null List init
-                data[i].append( f )
-            elif data[i][-1][0] != f[0]: # Time refresh
-                data[i].append( f )
+            if data[i][0][0] != f[0]: continue # code mismatch
+            if data[i][-1][0] != f[1]: # Time refresh
+                data[i].append( f[1:] )
+                if i >= t: break
 
-            #print(i, data)
         return
 
 
@@ -97,17 +97,21 @@ class minites_data():
 if __name__ == '__main__':
     import time
     d = minites_data()
-    '''
+
     select = 'n1,sh000001,n2,sz399006,n3'
-    result = [[], [], [], [], []]
-    d.get_data(select, result)
+    #select = 'sh000001,sz399006'
+    #result = [[['sh000001']], [['sz399006']]]
+    result = [[['n1']], [['sh000001']], [['n2']], [['sz399006']], [['n3']]]
+    d.gets(select, result)
     print( result )
-    time.sleep(2)
-    d.get_data(select, result)
+    #print( '\n\n' )
+    time.sleep(3)
+    d.gets(select, result)
     print( result )
     '''
     result = d.get_one('sh000001')
     print( result )
+    '''
 
 
 

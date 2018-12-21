@@ -99,16 +99,25 @@ class ListScreen(Screen):
     def rounds(self, dt=None):
         #select = 'sh000001,sz399006'
         if not self.rows: return
-        n = 1
+        codes = ''
+        r = []
         for i in self.rows:
-            mqt = self.mints.get_one(i.note[1]) # mintes quoto
-            i.show(mqt)
-            t = self.fd[n][2]
-            if mqt[0] != 0:
+            t = i.note[1]
+            codes += t + ','
+            r.append([[t]])
+
+        self.mints.gets(codes[:-1], r)
+        for i in range(len(r)):
+            mqt = r[i][-1] # mintes quoto
+            #print(mqt)
+            if len(mqt) == 1: continue
+            self.rows[i].show(mqt)
+            t = self.fd[i+1][2]
+            if mqt[0] != 0 :
                 if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
                     t.append(mqt[0])
                     self.app.save_fd()
-            n += 1
+
         #print('rounds ...')
 
 
