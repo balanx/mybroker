@@ -12,7 +12,8 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty, NumericProperty, ListProperty, StringProperty
+from kivy.properties import ListProperty
+from kivy.core.audio import SoundLoader
 from kivy.clock import Clock
 
 
@@ -27,6 +28,7 @@ class ListRow(BoxLayout):
         self.wisb = wisb
         self.index = index
         self.note = wisb.fd[index]
+        self.soundon = False
         super().__init__(**kwargs)
         self.show()
 
@@ -42,11 +44,8 @@ class ListRow(BoxLayout):
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
         if not self.note[0]:
             self.text[4] = 'Stop'
-        #elif len(self.note[2]) > 1:
-        #    self.text[4] = str(self.note[2][1:])
         else:
             self.text[4] = str(len(self.note[2]) - 1)
-        #print('==d==', self.note)
 
 
 class ListScreen(Screen):
@@ -58,9 +57,9 @@ class ListScreen(Screen):
         self.app = wisb
         self.fd = wisb.fd
         self.interval = self.fd[0][0]
+        self.sound = SoundLoader.load('./19.wav')
         super().__init__(**kwargs)
         self.refresh_list()
-        #self.event = Clock.schedule_once(self.rounds)
 
     def refresh_list(self):
         self.ids.layout.clear_widgets()
@@ -74,10 +73,11 @@ class ListScreen(Screen):
         self.rows.append(ListRow(self, len(self.rows) + 1))
         self.ids.layout.add_widget(self.rows[-1])
 
-    def open_note(self, instance):
-        self.index = instance.index
-        print('fd:',  self.fd)
-        print('row index in fd:',  self.index)
+    def open_note(self, row):
+        self.index = row.index
+        row.soundon = False
+        print('fd:', self.fd)
+        print('row index in fd:', self.index)
 
         self.notescr = notescreen.NoteScreen(self, name='note_screen')
         self.manager.add_widget(self.notescr)
@@ -107,19 +107,24 @@ class ListScreen(Screen):
             r.append([[t]])
 
         self.mints.gets(codes[:-1], r)
+        soundon = False
         for i in range(len(r)):
-            mqt = r[i][-1] # mintes quoto
+            mqt = r[i][-1] # minites quoto
             #print(mqt)
             if len(mqt) == 1: continue
             self.rows[i].show(mqt)
+            if self.rows[i].soundon: soundon = True
             t = self.fd[i+1][2]
-            if mqt[0] != 0 :
+            if mqt[0] != 0:
                 if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
                     t.append(mqt[0])
                     self.app.save_fd()
+                    self.rows[i].soundon = True
+                    soundon = True
 
         #print('rounds ...')
-
+        if soundon and self.sound.state == 'stop':
+            self.sound.play()
 
     def open_setting(self):
         self.manager.transition = SlideTransition(direction='right')
