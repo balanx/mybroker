@@ -37,5 +37,9 @@ class TypeTime(BoxLayout):
     def comment(self):
         self.text[1] = 'Deadline is ' + self.cond[4]
 
+    def set_today(self):
+        self.cond[2] = common.today()
+        self.text[0] = self.cond[2]
+
 
 #

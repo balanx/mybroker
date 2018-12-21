@@ -17,12 +17,23 @@ oneday = dt.timedelta(days=1)
 #today = dt.datetime.today() + dt.timedelta(hours=8)
 def today():
     t = dt.datetime.today()
-    return str(t)[:-7]
+    w =int2week(t.weekday())
+    return str(t)[:-7] + ' ' + w
 
 def str2date(t):
-    t = t[:-9].split('-')
+    t = t[:-13].split('-')
     t = dt.date(int(t[0]), int(t[1]), int(t[2]))
     return t
+
+def int2week(t):
+    if t == 0: return 'Mon'
+    elif t == 1: return 'Tue'
+    elif t == 2: return 'Wed'
+    elif t == 3: return 'Thu'
+    elif t == 4: return 'Fri'
+    elif t == 5: return 'Sat'
+    elif t == 6: return 'Sun'
+    else: return str(t)
 
 def init_cond():
     return [False, 0, None, None, None]
