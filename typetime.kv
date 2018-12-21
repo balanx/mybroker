@@ -11,31 +11,37 @@
         size_hint: (1, None)
         height: app.row_height
 
-        Label:
+        Button:
+            size_hint_x: None
+            width: self.height * 2
             text: 'Start'
 
-        TextInput:
-            id: txi_start
-            text: 'today'
+        Label:
+            text: root.text[0]
 
     BoxLayout:
         size_hint: (1, None)
         height: app.row_height
 
         Label:
+            size_hint_x: None
+            width: self.height * 2
             text: 'How soon'
 
         TextInput:
-            id: txi_limit
-            text: '0'
+            text: str(root.cond[3])
             on_text: root.on_text_time(self.text)
+
+        Label:
+            size_hint_x: None
+            width: self.height
+            text: 'days'
 
     Label:
         text_size: self.size
         halign: 'center'
         valign: 'middle'
-        id: lb_comment
-        text: 'Time'
+        text: root.text[1]
 
 
 #

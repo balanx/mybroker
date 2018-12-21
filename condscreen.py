@@ -76,7 +76,7 @@ class TestApp(App):
         # 1: Time
         # 2: Price
         self.cond = [ common.init_cond(),
-                      [False, 1, common.datetime.date.today(), 0, common.datetime.date.today()],
+                      [False, 1, common.today(), 0, common.today()],
                       [False, 2, 5, False, 1.0]
                     ]
 

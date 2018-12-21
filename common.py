@@ -14,10 +14,13 @@ from kivy.properties import BooleanProperty
 import datetime as dt
 
 oneday = dt.timedelta(days=1)
-today = dt.date.today()
+#today = dt.datetime.today() + dt.timedelta(hours=8)
+def today():
+    t = dt.datetime.today()
+    return str(t)[:-7]
 
 def str2date(t):
-    t = t.split('-')
+    t = t[:-9].split('-')
     t = dt.date(int(t[0]), int(t[1]), int(t[2]))
     return t
 
