@@ -104,10 +104,10 @@ class ListScreen(Screen):
             mqt = self.mints.get_one(i.note[1]) # mintes quoto
             i.show(mqt)
             t = self.fd[n][2]
-            #print(t[0])
-            if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
-                t.append(mqt[0])
-                self.app.save_fd()
+            if mqt[0] != 0:
+                if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
+                    t.append(mqt[0])
+                    self.app.save_fd()
             n += 1
         #print('rounds ...')
 
