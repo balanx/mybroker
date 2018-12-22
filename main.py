@@ -43,7 +43,7 @@ class ListRow(BoxLayout):
         if not self.note[0][1]:
             self.text[4] = 'Stop'
         else:
-            self.text[4] = str(len(self.note[2]) - 1) + (' #' if self.note[0][2] else '  ')
+            self.text[4] = str(len(self.note[2])) + (' #' if self.note[0][2] else '  ')
 
 
 class ListScreen(Screen):
@@ -112,10 +112,10 @@ class ListScreen(Screen):
             if len(mqt) == 1 or not self.rows[i].note[0][1]: continue
             self.rows[i].show(mqt)
             if self.rows[i].note[0][2]: soundon = True
-            t = self.fd[i+1][2]
+            t = self.fd[i+1]
             if mqt[0] != 0:
-                if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
-                    t.append(mqt[0])
+                if not eval(t[1][0]) if (len(t[2]) % 2) else eval(t[1][0]):
+                    t[2].append(mqt[0])
                     self.app.save_fd()
                     self.rows[i].note[0][2] = True
                     soundon = True

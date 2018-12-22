@@ -132,8 +132,9 @@ class NoteScreen(Screen):
 
             if s: r += '(' + s[:-5] + ') or '
         r = r[:-4] if r else 'False'
-        self.note[2][0] = r
-        self.text[0] = str(self.note[2])
+        self.note[1][0] = r
+        self.text[0] = r + '\n' + str(self.note[2])
+        return r
 
 
 

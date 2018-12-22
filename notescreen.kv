@@ -102,7 +102,7 @@
                 text: 'Log'
                 size_hint_x: None
                 width: self.height
-                on_release: root.note[2] = [root.note[2][0]]; root.text[0] = str(root.note[2])
+                on_release: root.note[2] = []; root.text[0] = root.note[1][0] + '\n[]'
 
             Label:
                 #text: 'Short Medium Long Term, Trends or Vibration'

@@ -39,8 +39,8 @@ def init_cond():
     return [False, 0, None, None, None]
 
 def init_note():
-    #               enable  sound  debug   Log
-    return [['sh01', False, False], [ ], ['False'], [init_cond()] ]
+    #               enable  sound     debug   Log
+    return [['sh01', False, False], ['Cond'], [ ], [init_cond()] ]
 
 
 class ConfirmPopup(Popup):
