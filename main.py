@@ -45,7 +45,7 @@ class ListRow(BoxLayout):
         if not self.note[0]:
             self.text[4] = 'Stop'
         else:
-            self.text[4] = str(len(self.note[2]) - 1)
+            self.text[4] = str(len(self.note[2]) - 1) + (' #' if self.soundon else '  ')
 
 
 class ListScreen(Screen):
