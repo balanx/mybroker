@@ -13,24 +13,26 @@ import common, condscreen
 
 
 class NoteSubRow(BoxLayout):
-    cond = ListProperty()
+    text = ListProperty([''])
 
     def __init__(self, wisb, t1, t2, **kwargs):
         self.wisb = wisb
         self.t1 = t1
         self.t2 = t2
         self.cond = wisb.note[t1][t2]
+        wisb.show_row(self)
         super().__init__(**kwargs)
 
 
 class NoteRow(BoxLayout):
-    cond = ListProperty()
+    text = ListProperty([''])
     t2 = 0
 
     def __init__(self, wisb, t1, **kwargs):
         self.wisb = wisb
         self.t1 = t1
         self.cond = wisb.note[t1][0]
+        wisb.show_row(self)
         super().__init__(**kwargs)
 
 
@@ -83,11 +85,12 @@ class NoteScreen(Screen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'cond_screen'
 
-    def close_cond(self, instance):
+    def close_cond(self):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'note_screen'
         self.manager.remove_widget(self.condscr)
-        self.rows[self.t3].cond = self.note[self.t1][self.t2]
+        #self.rows[self.t3].cond = self.note[self.t1][self.t2]
+        self.show_row(self.rows[self.t3])
         self.show_cond()
 
     def del_cond(self, instance):
@@ -97,8 +100,6 @@ class NoteScreen(Screen):
             del self.note[self.t1]
         self.refresh_cond()
 
-    #def on_text_code(self, text):
-    #    self.note[0][0] = text
 
     def cond2str(self, subcond):
         if not subcond[0]: return None
@@ -136,6 +137,33 @@ class NoteScreen(Screen):
         self.text[0] = r + '\n' + str(self.note[2])
         return r
 
+    def show_row(self, row):
+        cond = row.cond
+        if not cond[0]:
+            row.text[0] = 'None'
+        elif cond[1] == 1:
+            row.text[0] = row.cond[4]
+        elif cond[1] == 2:
+            t = ' > ' if cond[3] else ' < '
+            data = self.wisb.qt[self.index-1]
+            pr = str(data[1][1])
+            open = data[1][2]
+            close = data[1][3]
+            max = data[1][4]
+            min = data[1][5]
+            if cond[2] == 2:
+                r = 'P' + t + 'open * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(open) + ' * ' + str(cond[4]) + ' = ' + str(open * cond[4])
+            elif cond[2] == 3:
+                r = 'P' + t + 'close * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(close) + ' * ' + str(cond[4]) + ' = ' + str(close * cond[4])
+            elif cond[2] == 4:
+                r = 'P < ' + 'max * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(max) + ' * ' + str(cond[4]) + ' = ' + str(max * cond[4])
+            elif cond[2] == 5:
+                r = 'P > ' + 'min * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(min) + ' * ' + str(cond[4]) + ' = ' + str(min * cond[4])
+            else: #if cond[2] == 1:
+                r = 'P' + t + str(cond[4]) + '\n' + pr + ' ~ ' + str(cond[4])
+            row.text[0] = r
+        else:
+            row.text[0] = 'None'
 
 
 class TestApp(App):

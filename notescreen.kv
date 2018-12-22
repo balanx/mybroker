@@ -14,7 +14,7 @@
         text: '*'
 
     Button:
-        text: str(root.cond)
+        text: str(root.text[0])
         on_release: root.wisb.open_cond(root)
 
 
@@ -29,7 +29,7 @@
         on_release: root.wisb.add_subcond(root)
 
     Button:
-        text: str(root.cond)
+        text: str(root.text[0])
         on_release: root.wisb.open_cond(root)
 
 

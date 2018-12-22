@@ -41,7 +41,7 @@ class ListRow(BoxLayout):
         self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
         if not self.note[0][1]:
-            self.text[4] = 'Stop'
+            self.text[4] = 'None'
         else:
             self.text[4] = str(len(self.note[2])) + (' #' if self.note[0][2] else '  ')
 
@@ -58,6 +58,9 @@ class ListScreen(Screen):
         self.sound = SoundLoader.load('./19.wav')
         super().__init__(**kwargs)
         self.refresh_list()
+        #
+        self.qt = [[[''],[0]*6]] * len(self.rows)
+
 
     def refresh_list(self):
         self.ids.layout.clear_widgets()
@@ -98,16 +101,16 @@ class ListScreen(Screen):
         #select = 'sh000001,sz399006'
         if not self.rows: return
         codes = ''
-        r = []
+        self.qt = []
         for i in self.rows:
             t = i.note[0][0]
             codes += t + ','
-            r.append([[t]])
+            self.qt.append([[t]])
 
-        self.mints.gets(codes[:-1], r)
+        self.mints.gets(codes[:-1], self.qt)
         soundon = False
-        for i in range(len(r)):
-            mqt = r[i][-1] # minites quoto
+        for i in range(len(self.qt)):
+            mqt = self.qt[i][-1] # minites quoto
             #print(mqt)
             if len(mqt) == 1 or not self.rows[i].note[0][1]: continue
             self.rows[i].show(mqt)
