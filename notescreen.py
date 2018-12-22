@@ -97,8 +97,8 @@ class NoteScreen(Screen):
             del self.note[self.t1]
         self.refresh_cond()
 
-    def on_text_code(self, text):
-        self.note[1] = text
+    #def on_text_code(self, text):
+    #    self.note[0][0] = text
 
     def cond2str(self, subcond):
         if not subcond[0]: return None
@@ -142,9 +142,9 @@ class TestApp(App):
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        self.fd = [[False], [False, 'sh01', ['False'], [[False, 0, None, None, None]]]]
-        self.note = [ False,
-                      'sh01',
+        self.fd = [[False], [['sh01', False, False], [], ['False'], [[False, 0, None, None, None]]]]
+        self.note = [ ['sh01', False, False],
+                      [],
                       ['False'],
                       [common.init_cond()],
                       [common.init_cond(), [False, 2, 5, False, 1.0]]

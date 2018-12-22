@@ -50,10 +50,10 @@
                 on_release: root.wisb.close_note(); app.save_fd()
 
             Button:
-                text: '~' if root.note[0] else '|'
+                text: '~' if root.note[0][1] else '|'
                 size_hint_x: None
                 width: self.height
-                on_release: root.note[0] = not root.note[0]; self.text = '~' if root.note[0] else '|'
+                on_release: root.note[0][1] = not root.note[0][1]; self.text = '~' if root.note[0][1] else '|'
 
             Label:
                 text: 'Note'
@@ -74,11 +74,11 @@
                 width: self.height
 
             TextInput:
-                #id: txi_code
-                text: root.note[1]
+                text: root.note[0][0]
                 multiline: False
                 #focus: True
-                on_text: root.on_text_code(self.text)
+                #on_text: root.on_text_code(self.text)
+                on_text: root.note[0][0] = self.text
 
             Button:
                 text: "+"

@@ -21,14 +21,12 @@ import common, notescreen, settingscreen, stock
 
 
 class ListRow(BoxLayout):
-    #note = ListProperty()
     text = ListProperty(['']*5)
 
     def __init__(self, wisb, index, **kwargs):
         self.wisb = wisb
         self.index = index
         self.note = wisb.fd[index]
-        self.soundon = False
         super().__init__(**kwargs)
         self.show()
 
@@ -38,14 +36,14 @@ class ListRow(BoxLayout):
         return ('%.2f' % d)
 
     def show(self, data=[0]*6):
-        self.text[0] = self.note[1] + '\n' + ('%.2f' % data[2]) + '\n' + self.format(data[2], data[3]) + '%'
+        self.text[0] = self.note[0][0] + '\n' + ('%.2f' % data[2]) + '\n' + self.format(data[2], data[3]) + '%'
         self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
         self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
         self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
-        if not self.note[0]:
+        if not self.note[0][1]:
             self.text[4] = 'Stop'
         else:
-            self.text[4] = str(len(self.note[2]) - 1) + (' #' if self.soundon else '  ')
+            self.text[4] = str(len(self.note[2]) - 1) + (' #' if self.note[0][2] else '  ')
 
 
 class ListScreen(Screen):
@@ -75,7 +73,7 @@ class ListScreen(Screen):
 
     def open_note(self, row):
         self.index = row.index
-        row.soundon = False
+        row.note[0][2] = False
         print('fd:', self.fd)
         print('row index in fd:', self.index)
 
@@ -102,7 +100,7 @@ class ListScreen(Screen):
         codes = ''
         r = []
         for i in self.rows:
-            t = i.note[1]
+            t = i.note[0][0]
             codes += t + ','
             r.append([[t]])
 
@@ -111,15 +109,15 @@ class ListScreen(Screen):
         for i in range(len(r)):
             mqt = r[i][-1] # minites quoto
             #print(mqt)
-            if len(mqt) == 1: continue
+            if len(mqt) == 1 or not self.rows[i].note[0][1]: continue
             self.rows[i].show(mqt)
-            if self.rows[i].soundon: soundon = True
+            if self.rows[i].note[0][2]: soundon = True
             t = self.fd[i+1][2]
             if mqt[0] != 0:
                 if eval(t[0]) if (len(t) % 2) else not eval(t[0]):
                     t.append(mqt[0])
                     self.app.save_fd()
-                    self.rows[i].soundon = True
+                    self.rows[i].note[0][2] = True
                     soundon = True
 
         #print('rounds ...')
