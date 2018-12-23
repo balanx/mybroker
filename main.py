@@ -59,7 +59,7 @@ class ListScreen(Screen):
         super().__init__(**kwargs)
         self.refresh_list()
         #
-        self.qt = [[[''],[0]*6]] * len(self.rows)
+        self.quota = [[[''],[0]*6]] * len(self.rows)
 
 
     def refresh_list(self):
@@ -101,24 +101,24 @@ class ListScreen(Screen):
         #select = 'sh000001,sz399006'
         if not self.rows: return
         codes = ''
-        self.qt = []
+        self.quota = []
         for i in self.rows:
             t = i.note[0][0]
             codes += t + ','
-            self.qt.append([[t]])
+            self.quota.append([[t]])
 
-        self.mints.gets(codes[:-1], self.qt)
+        self.mints.gets(codes[:-1], self.quota)
         soundon = False
-        for i in range(len(self.qt)):
-            mqt = self.qt[i][-1] # minites quoto
-            #print(mqt)
-            if len(mqt) == 1 or not self.rows[i].note[0][1]: continue
-            self.rows[i].show(mqt)
+        for i in range(len(self.quota)):
+            mq = self.quota[i][-1] # minites quotation
+            #print(mq)
+            if len(mq) == 1 or not self.rows[i].note[0][1]: continue
+            self.rows[i].show(mq)
             if self.rows[i].note[0][2]: soundon = True
             t = self.fd[i+1]
-            if mqt[0] != 0:
+            if mq[0] != 0:
                 if not eval(t[1][0]) if (len(t[2]) % 2) else eval(t[1][0]):
-                    t[2].append(mqt[0])
+                    t[2].append(mq[0])
                     self.app.save_fd()
                     self.rows[i].note[0][2] = True
                     soundon = True
