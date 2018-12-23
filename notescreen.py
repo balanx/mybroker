@@ -85,16 +85,16 @@ class NoteScreen(Screen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'cond_screen'
 
-    def close_cond(self):
+    def close_cond(self, condscr):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'note_screen'
-        self.manager.remove_widget(self.condscr)
+        self.manager.remove_widget(condscr)
         #self.rows[self.t3].cond = self.note[self.t1][self.t2]
         self.show_row(self.rows[self.t3])
         self.show_cond()
 
-    def del_cond(self, instance):
-        self.close_cond(instance)
+    def del_cond(self, condscr):
+        self.close_cond(condscr)
         del self.note[self.t1][self.t2]
         if len(self.note[self.t1]) == 0:
             del self.note[self.t1]
