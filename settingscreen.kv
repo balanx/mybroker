@@ -14,19 +14,27 @@
             height: app.row_height
 
             Button:
-                text: "<<"
+                text: '<<'
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.close_setting(); app.save_fd()
+                on_release: root.listscr.close_setting(); app.save_fd()
+
+            Button:
+                text: '~' if root.listscr.online else '|'
+                size_hint_x: None
+                width: self.height
+                on_release:
+                    root.listscr.online = not root.listscr.online
+                    self.text = '~' if root.listscr.online else '|'
 
             Label:
                 text: 'Setting'
 
             Button:
-                text: "x"
+                text: 'x'
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.close_setting()
+                on_release: root.listscr.close_setting()
 
         ScrollView:
             size_hint: (1, 1)
@@ -48,15 +56,14 @@
                         width: self.height
 
                     TextInput:
-                        id: txi_code
-                        text: root.text[0]
+                        text: str(root.text[0])
                         multiline: False
                         #focus: True
                         on_text: root.on_text_interval(self.text)
 
         Label:
             size_hint: (1, 0.5)
-            text: 'MyBroker    2018.12.20\n\nhttps://github.com/balanx/mybroker'
+            text: 'MyBroker    2018.12.20\nhttps://github.com/balanx/mybroker'
 
 
 #

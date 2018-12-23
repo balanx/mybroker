@@ -45,7 +45,7 @@
             height: app.row_height
 
             Button:
-                text: "$"
+                text: '$'
                 size_hint_x: None
                 width: self.height
                 on_release: root.open_setting()
@@ -53,16 +53,18 @@
             Button:
                 size_hint_x: None
                 width: self.height
-                text: "~" if root.text[0] else '|'
-                on_release: root.toggle_enable()
+                text: '|' if root.mute else '~'
+                on_release:
+                    root.mute = not root.mute
+                    self.text = '|' if root.mute else '~'
 
             Label:
-                text: "MyBroker"
+                text: 'MyBroker'
                 #color: (1, 1, 1, 1)
                 #background_color: (.3, .3, .3, 1)
 
             Button:
-                text: "+"
+                text: '+'
                 size_hint_x: None
                 width: self.height
                 on_release: root.add_note()

@@ -2,27 +2,27 @@
 # Copyright (C) 2018 tobalanx@qq.com
 #
 
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.screenmanager import Screen
+from kivy.properties import ListProperty
 
 
 class SettingScreen(Screen):
-    text = ['']
+    text = ListProperty()
 
-    def __init__(self, wisb, **kwargs):
-        self.wisb = wisb
-        self.text[0] = str(self.wisb.fd[0][0])
+    def __init__(self, listscr, **kwargs):
+        self.listscr = listscr
+        self.text = self.listscr.fd[0]
         super().__init__(**kwargs)
 
     def on_text_interval(self, text):
         try:
             t = float(text)
         except:
-            t = 3
+            t = 3.0
 
-        if t < 0.1:
-            self.wisb.fd[0][0] = 0.1
+        if t < 1.0:
+            self.listscr.fd[0][0] = 1.0
         else:
-            self.wisb.fd[0][0] = t
-
+            self.listscr.fd[0][0] = t
 
 #

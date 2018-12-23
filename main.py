@@ -50,16 +50,18 @@ class ListScreen(Screen):
     text = ListProperty([False])
     rows = []
     mints = stock.minites_data()
+    online = False
+    sound = SoundLoader.load('./19.wav')
+    mute = True
 
     def __init__(self, wisb, **kwargs):
         self.app = wisb
         self.fd = wisb.fd
-        self.interval = self.fd[0][0]
-        self.sound = SoundLoader.load('./19.wav')
         super().__init__(**kwargs)
         self.refresh_list()
         #
         self.quota = [[[''],[0]*6]] * len(self.rows)
+        self.event = Clock.schedule_once(self.rounds)
 
 
     def refresh_list(self):
@@ -124,7 +126,7 @@ class ListScreen(Screen):
                     soundon = True
 
         #print('rounds ...')
-        if soundon and self.sound.state == 'stop':
+        if soundon and self.sound.state == 'stop' and not self.mute:
             self.sound.play()
 
     def open_setting(self):
@@ -137,17 +139,12 @@ class ListScreen(Screen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.settingscr)
-        self.interval = self.fd[0][0]
-        if self.text[0]:
+        interval = self.fd[0][0]
+        if self.event.is_triggered:
             self.event.cancel()
-            self.event = Clock.schedule_interval(self.rounds, self.interval)
+        if self.online:
+            self.event = Clock.schedule_interval(self.rounds, interval)
 
-    def toggle_enable(self):
-        self.text[0] = not self.text[0]
-        if self.text[0]:
-            self.event = Clock.schedule_interval(self.rounds, self.interval)
-        elif self.event.is_triggered:
-            self.event.cancel()
 
 #
 
@@ -175,7 +172,7 @@ class MainApp(App):
             self.fn = './' + self.fn
 
         if not exists(self.fn):
-            return [[3]]
+            return [[3.0]]
         with open(self.fn) as fd:
             return json.load(fd)
 
