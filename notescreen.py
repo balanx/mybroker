@@ -43,7 +43,7 @@ class NoteScreen(Screen):
     def __init__(self, wisb, **kwargs):
         self.index = wisb.index
         self.wisb = wisb
-        self.note = wisb.fd[self.index]
+        self.note = wisb.fd[1][self.index]
         super().__init__(**kwargs)
         self.refresh_cond()
 
@@ -145,7 +145,7 @@ class NoteScreen(Screen):
             row.text[0] = row.cond[4]
         elif cond[1] == 2:
             t = ' > ' if cond[3] else ' < '
-            d = self.wisb.quota[self.index-1]
+            d = self.wisb.quota[self.index]
             pr = str(d[1][1])
             open = d[1][2]
             close = d[1][3]

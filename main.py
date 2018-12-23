@@ -26,7 +26,7 @@ class ListRow(BoxLayout):
     def __init__(self, wisb, index, **kwargs):
         self.wisb = wisb
         self.index = index
-        self.note = wisb.fd[index]
+        self.note = wisb.fd[1][index]
         super().__init__(**kwargs)
         self.show()
 
@@ -67,13 +67,13 @@ class ListScreen(Screen):
     def refresh_list(self):
         self.ids.layout.clear_widgets()
         self.rows.clear()
-        for i in self.fd[1:]:
+        for i in self.fd[1]:
             self.add_note(i)
 
     def add_note(self, note=None):
         if note is None:
-            self.fd.append(common.init_note())
-        self.rows.append(ListRow(self, len(self.rows) + 1))
+            self.fd[1].append(common.init_note())
+        self.rows.append(ListRow(self, len(self.rows)))
         self.ids.layout.add_widget(self.rows[-1])
 
     def open_note(self, row):
@@ -91,8 +91,8 @@ class ListScreen(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.notescr)
-        self.rows[self.index - 1].note = self.fd[self.index]
-        self.rows[self.index - 1].show()
+        self.rows[self.index].note = self.fd[1][self.index]
+        self.rows[self.index].show()
 
     def del_note(self):
         self.close_note()
@@ -117,7 +117,7 @@ class ListScreen(Screen):
             if len(mq) == 1 or not self.rows[i].note[0][1]: continue
             self.rows[i].show(mq)
             if self.rows[i].note[0][2]: soundon = True
-            t = self.fd[i+1]
+            t = self.fd[1][i]
             if mq[0] != 0:
                 if not eval(t[1][0]) if (len(t[2]) % 2) else eval(t[1][0]):
                     t[2].append(mq[0])
@@ -172,7 +172,7 @@ class MainApp(App):
             self.fn = './' + self.fn
 
         if not exists(self.fn):
-            return [[3.0]]
+            return [[3.0], []]
         with open(self.fn) as fd:
             return json.load(fd)
 

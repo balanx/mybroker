@@ -35,17 +35,27 @@ def int2week(t):
     elif t == 6: return 'Sun'
     else: return str(t)
 
+#
 def init_cond():
     return [False, 0, None, None, None]
 
 def init_note():
-    #               enable  sound     debug   Log
-    return [['sh01', False, False], ['Cond'], [ ], [init_cond()] ]
+    #               enable  soundon   debug     Log
+    return [['sh01', False, False], ['eval()'], [ ], [init_cond()] ]
 
+#     interval
+# fd = [[3], []]
+#    = [[3], [n1, n2, ...]]
+#
+
+#
+# quota = [ [['sh000001'], [tm, curr, open, close, max, min], ],
+#           [['sz399006'], [tm, curr, open, close, max, min], ] ]
+#
+# [[[''],[0]*6]] * n
 
 class ConfirmPopup(Popup):
     result = BooleanProperty(False)
-
 
 
 
