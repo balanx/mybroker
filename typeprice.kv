@@ -83,15 +83,13 @@
             text: 'Value'
 
         TextInput:
-            id: txi_val
-            text: '0'
+            text: str(root.cond[4])
             on_text: root.on_text_val(self.text)
 
     Label:
         text_size: self.size
         halign: 'center'
         valign: 'middle'
-        id: lb_comment
         text: root.text[0]
 
 

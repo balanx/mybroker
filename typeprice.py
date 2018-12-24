@@ -13,7 +13,10 @@ class TypePrice(BoxLayout):
 
     def __init__(self, cond, **kwargs):
         self.cond = cond
-        cond[1] = 2
+        if cond[1] != 2:
+            cond[1] = 2
+            cond[4] = 1.0
+
         super().__init__(**kwargs)
 
         if cond[2] == 2:
@@ -32,8 +35,6 @@ class TypePrice(BoxLayout):
         else:
             self.ids.cb_less.active = True
 
-        self.ids.txi_val.text = str(cond[4])
-
 
     def on_checkbox_active(self, instance, n):
         if instance.active:
@@ -50,7 +51,7 @@ class TypePrice(BoxLayout):
         try:
             self.cond[4] = float(text)
         except:
-            self.cond[4] = 0.0
+            self.cond[4] = 1.0
 
         self.comment()
 
