@@ -96,7 +96,7 @@ class ListScreen(Screen):
 
     def del_note(self):
         self.close_note()
-        del self.fd[self.index]
+        del self.fd[1][self.index]
         self.refresh_list()
 
     def rounds(self, dt=None):
