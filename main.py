@@ -125,7 +125,7 @@ class ListScreen(Screen):
                     self.rows[i].note[0][2] = True
                     soundon = True
 
-        #print('rounds ...')
+        #print('rounds ...', mq)
         if soundon and self.sound.state == 'stop' and not self.mute:
             self.sound.play()
 

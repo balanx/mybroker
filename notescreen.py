@@ -146,11 +146,12 @@ class NoteScreen(Screen):
         elif cond[1] == 2:
             t = ' > ' if cond[3] else ' < '
             d = self.wisb.quota[self.index]
-            pr = str(d[1][1])
-            open = d[1][2]
-            close = d[1][3]
-            max = d[1][4]
-            min = d[1][5]
+            if len(d) > 1:
+                tm, pr, open, close, max, min = d[-1]
+            else:
+                tm, pr, open, close, max, min = [0]*6
+
+            pr = str(pr)
             if cond[2] == 2:
                 r = 'P' + t + 'open * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(open) + ' * ' + str(cond[4]) + ' = ' + str(open * cond[4])
             elif cond[2] == 3:
@@ -161,6 +162,7 @@ class NoteScreen(Screen):
                 r = 'P > ' + 'min * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(min) + ' * ' + str(cond[4]) + ' = ' + str(min * cond[4])
             else: #if cond[2] == 1:
                 r = 'P' + t + str(cond[4]) + '\n' + pr + ' ~ ' + str(cond[4])
+
             row.text[0] = r
         else:
             row.text[0] = 'None'
