@@ -45,7 +45,7 @@
             height: app.row_height
 
             Button:
-                text: '$'
+                text: '$' if root.text[0] else '='
                 size_hint_x: None
                 width: self.height
                 on_release: root.open_setting()

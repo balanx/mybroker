@@ -47,12 +47,12 @@ class ListRow(BoxLayout):
 
 
 class ListScreen(Screen):
-    text = ListProperty([False])
     rows = []
     mints = stock.minites_data()
     online = False
     sound = SoundLoader.load('./19.wav')
     mute = True
+    text = ListProperty([online]) # online_symbol
 
     def __init__(self, wisb, **kwargs):
         self.app = wisb
@@ -140,6 +140,7 @@ class ListScreen(Screen):
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.settingscr)
         interval = self.fd[0][0]
+        self.text[0] = self.online
         if self.event.is_triggered:
             self.event.cancel()
         if self.online:
@@ -153,6 +154,7 @@ class MainApp(App):
     fn = 'mybroker.json'
 
     def build(self):
+        self.title = 'MyBroker'
         self.row_height = Window.height / 10
         self.row_space = 10
 
