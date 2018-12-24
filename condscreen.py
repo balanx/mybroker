@@ -39,7 +39,7 @@ class CondScreen(Screen):
 
     def __init__(self, wisb, **kwargs):
         self.wisb = wisb
-        self.cond = wisb.note[wisb.t1][wisb.t2]
+        self.cond = wisb.note[wisb.xi][wisb.yi]
         self.text = self.cond
         super().__init__(**kwargs)
 
