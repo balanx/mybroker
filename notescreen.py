@@ -19,7 +19,7 @@ class NoteSubRow(BoxLayout):
         self.wisb = wisb
         self.xi = xi
         self.yi = yi
-        self.cond = wisb.note[xi][yi]
+        self.cond = wisb.condit[xi][yi]
         wisb.show_row(self)
         super().__init__(**kwargs)
 
@@ -31,7 +31,7 @@ class NoteRow(BoxLayout):
     def __init__(self, wisb, xi, **kwargs):
         self.wisb = wisb
         self.xi = xi
-        self.cond = wisb.note[xi][0]
+        self.cond = wisb.condit[xi][0]
         wisb.show_row(self)
         super().__init__(**kwargs)
 
@@ -44,15 +44,16 @@ class NoteScreen(Screen):
         self.index = wisb.index
         self.wisb = wisb
         self.note = wisb.fd[1][self.index]
+        self.condit = self.note[3]
         super().__init__(**kwargs)
         self.refresh_cond()
 
     def refresh_cond(self):
         self.ids.layout.clear_widgets()
         self.rows.clear()
-        # [ False, 'sh01', ['Log'], [condition], [], ... ]
-        xi = 3
-        for cond in self.note[xi:]:
+        # [ False, 'sh01', ['Log'], [condition, ... ] ]
+        xi = 0
+        for cond in self.condit:
             self.rows.append(NoteRow(self, xi))
             self.ids.layout.add_widget(self.rows[-1])
             if len(cond) > 1: # 1st has done as NoteRow(), other as NoteSubRow()
@@ -65,21 +66,20 @@ class NoteScreen(Screen):
         self.show_cond()
 
     def add_cond(self, cond=None):
-        xi = len(self.note)
-        self.note.append( [common.init_cond()] ) # [[]]
+        xi = len(self.condit)
+        self.condit.append([common.init_cond()]) # [[]]
         self.rows.append(NoteRow(self, xi))
         self.ids.layout.add_widget(self.rows[-1])
 
-    def add_subcond(self, instance):
-        length = len(self.note[instance.xi])
-        self.note[instance.xi].insert(length, common.init_cond() ) # []
+    def add_subcond(self, row):
+        self.condit[row.xi].append(common.init_cond()) # []
         self.refresh_cond()
 
-    def open_cond(self, instance):
-        self.xi = instance.xi
-        self.yi = instance.yi
-        self.ri = self.rows.index(instance)
-        cond = self.note[self.xi][self.yi]
+    def open_cond(self, row):
+        self.xi = row.xi
+        self.yi = row.yi
+        self.ri = self.rows.index(row)
+        cond = self.condit[self.xi][self.yi]
         self.condscr = condscreen.CondScreen(self, name='cond_screen')
         self.manager.add_widget(self.condscr)
         self.manager.transition = SlideTransition(direction='left')
@@ -95,9 +95,9 @@ class NoteScreen(Screen):
 
     def del_cond(self, condscr):
         self.close_cond(condscr)
-        del self.note[self.xi][self.yi]
-        if len(self.note[self.xi]) == 0:
-            del self.note[self.xi]
+        del self.condit[self.xi][self.yi]
+        if len(self.condit[self.xi]) == 0:
+            del self.condit[self.xi]
         self.refresh_cond()
 
 
@@ -124,7 +124,7 @@ class NoteScreen(Screen):
 
     def show_cond(self):
         r = ''
-        for cond in self.note[3:]:
+        for cond in self.condit:
             s = ''
             for i in cond[:]:
                 t = self.cond2str(i)
@@ -173,13 +173,14 @@ class TestApp(App):
     def build(self):
         self.row_height = Window.height / 10
         self.row_space = 10
-        self.fd = [[False], [['sh01', False, False], [], ['False'], [[False, 0, None, None, None]]]]
         self.note = [ ['sh01', False, False],
                       [],
                       ['False'],
-                      [common.init_cond()],
-                      [common.init_cond(), [False, 2, 5, False, 1.0]]
+                      [ [ common.init_cond() ],
+                        [ common.init_cond(), [False, 2, 5, False, 1.0] ]
+                      ]
                     ]
+        self.fd = [[False], [self.note]]
 
         notescr = NoteScreen(name='note_screen')
         root = ScreenManager()
