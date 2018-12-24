@@ -9,41 +9,31 @@ import common
 
 
 class TypePrice(BoxLayout):
-    text = ListProperty([''])
+    text = ListProperty()
+    sym = ['Abs', 'Open', 'Close', 'Max', 'Min', '>', '<']
 
     def __init__(self, cond, **kwargs):
         self.cond = cond
         if cond[1] != 2:
-            cond[1] = 2
-            cond[4] = 1.0
+            self.cond[1] = 2
+            self.cond[2] = self.sym[0]
+            self.cond[3] = self.sym[-1]
+            self.cond[4] = 1.0
 
+        self.comment()
         super().__init__(**kwargs)
-
-        if cond[2] == 2:
-            self.ids.cb_open.active = True
-        elif cond[2] == 3:
-            self.ids.cb_close.active = True
-        elif cond[2] == 4:
-            self.ids.cb_max.active = True
-        elif cond[2] == 5:
-            self.ids.cb_min.active = True
-        else: #if cond[2] == 1:
-            self.ids.cb_abs.active = True
-
-        if cond[3]:
-            self.ids.cb_more.active = True
-        else:
-            self.ids.cb_less.active = True
 
 
     def on_checkbox_active(self, instance, n):
         if instance.active:
-            if n < 10:
-                self.cond[2] = n
-            elif n == 10: # more
-                self.cond[3] = True
-            else: # if n == 11: # less
-                self.cond[3] = False
+            if n < 5:
+                self.cond[2] = self.sym[n]
+                if n == 3: # Max
+                    self.cond[3] = self.sym[6]
+                elif n == 4: # Min
+                    self.cond[3] = self.sym[5]
+            elif self.cond[2] != self.sym[3] and self.cond[2] != self.sym[4]:
+                self.cond[3] = self.sym[n]
 
         self.comment()
 
@@ -56,19 +46,14 @@ class TypePrice(BoxLayout):
         self.comment()
 
     def comment(self):
-        t = ' > ' if self.cond[3] else ' < '
-        if self.cond[2] == 2:
-            r = 'P' + t + 'open * ' + str(self.cond[4])
-        elif self.cond[2] == 3:
-            r = 'P' + t + 'close * ' + str(self.cond[4])
-        elif self.cond[2] == 4:
-            r = 'P < ' + 'max * ' + str(self.cond[4])
-        elif self.cond[2] == 5:
-            r = 'P > ' + 'min * ' + str(self.cond[4])
-        else: #if self.cond[2] == 1:
-            r = 'P' + t + str(self.cond[4])
+        t = str(self.cond[4])
+        #print(self.cond)
+        if self.cond[2] != self.sym[0]:
+            r = 'CP ' + self.cond[3] + ' ' +  self.cond[2] + ' * ' + t
+        else:
+            r = 'CP ' + self.cond[3] + ' ' +  t
 
-        self.text[0] = r
-
+        self.text = [self.cond[2], self.cond[3], r]
+        self.text[1] = self.cond[3]
 
 #

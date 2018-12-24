@@ -12,68 +12,64 @@
         height: app.row_height
 
         Label:
-            text: 'Abs'
+            text: root.sym[0]
 
         CheckBox:
-            id: cb_abs
             group: 'g1'
-            #active: True
+            active: root.text[0]==root.sym[0]
+            on_active: root.on_checkbox_active(self, 0)
+
+        Label:
+            text: root.sym[1]
+
+        CheckBox:
+            group: 'g1'
+            active: root.text[0]==root.sym[1]
             on_active: root.on_checkbox_active(self, 1)
 
         Label:
-            text: 'Open'
+            text: root.sym[2]
 
         CheckBox:
-            id: cb_open
             group: 'g1'
+            active: root.text[0]==root.sym[2]
             on_active: root.on_checkbox_active(self, 2)
 
         Label:
-            text: 'Close'
+            text: root.sym[3]
 
         CheckBox:
-            id: cb_close
             group: 'g1'
+            active: root.text[0]==root.sym[3]
             on_active: root.on_checkbox_active(self, 3)
 
         Label:
-            text: 'Max'
+            text: root.sym[4]
 
         CheckBox:
-            id: cb_max
             group: 'g1'
+            active: root.text[0]==root.sym[4]
             on_active: root.on_checkbox_active(self, 4)
-
-        Label:
-            text: 'Min'
-
-        CheckBox:
-            id: cb_min
-            group: 'g1'
-            on_active: root.on_checkbox_active(self, 5)
 
     BoxLayout:
         size_hint: (1, None)
         height: app.row_height
 
         Label:
-            id: lb_more
-            text: '>'
+            text: root.sym[5]
 
         CheckBox:
-            id: cb_more
             group: 'g2'
-            on_active: root.on_checkbox_active(self, 10)
+            active: root.text[1]==root.sym[5]
+            on_active: root.on_checkbox_active(self, 5)
 
         Label:
-            id: lb_less
-            text: '<'
+            text: root.sym[6]
 
         CheckBox:
-            id: cb_less
             group: 'g2'
-            #active: True
-            on_active: root.on_checkbox_active(self, 11)
+            active: root.text[1]==root.sym[6]
+            on_active: root.on_checkbox_active(self, 6)
 
     BoxLayout:
         size_hint: (1, None)
@@ -90,7 +86,7 @@
         text_size: self.size
         halign: 'center'
         valign: 'middle'
-        text: root.text[0]
+        text: root.text[2]
 
 
 #

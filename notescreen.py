@@ -123,6 +123,7 @@ class NoteScreen(Screen):
             return 'False'
 
     def show_cond(self):
+        return
         r = ''
         for cond in self.condit:
             s = ''
@@ -177,12 +178,13 @@ class TestApp(App):
                       [],
                       ['False'],
                       [ [ common.init_cond() ],
-                        [ common.init_cond(), [False, 2, 5, False, 1.0] ]
+                        [ common.init_cond(), [False, 0, 5, False, 1.0] ]
                       ]
                     ]
         self.fd = [[False], [self.note]]
+        self.index = 0
 
-        notescr = NoteScreen(name='note_screen')
+        notescr = NoteScreen(self, name='note_screen')
         root = ScreenManager()
         root.add_widget(notescr)
         return root
