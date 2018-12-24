@@ -14,6 +14,7 @@ import common, condscreen
 
 class NoteSubRow(BoxLayout):
     text = ListProperty([''])
+    result = ''
 
     def __init__(self, wisb, xi, yi, **kwargs):
         self.wisb = wisb
@@ -26,6 +27,7 @@ class NoteSubRow(BoxLayout):
 
 class NoteRow(BoxLayout):
     text = ListProperty([''])
+    result = ''
     yi = 0
 
     def __init__(self, wisb, xi, **kwargs):
@@ -63,7 +65,7 @@ class NoteScreen(Screen):
                     self.ids.layout.add_widget(self.rows[-1])
                     yi += 1
             xi += 1
-        self.show_cond()
+        self.comment()
 
     def add_cond(self, cond=None):
         xi = len(self.condit)
@@ -86,12 +88,18 @@ class NoteScreen(Screen):
         self.manager.current = 'cond_screen'
 
     def close_cond(self, condscr):
+        if condscr.cond[0] and condscr.cond[1]: # enable and Not 0
+            self.rows[self.ri].result = condscr.type.text[2]
+        else:
+            self.rows[self.ri].result = 'None'
+
+        self.rows[self.ri].text[0] = self.rows[self.ri].result
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'note_screen'
         self.manager.remove_widget(condscr)
         #self.rows[self.ri].cond = self.note[self.xi][self.yi]
         self.show_row(self.rows[self.ri])
-        self.show_cond()
+        self.comment()
 
     def del_cond(self, condscr):
         self.close_cond(condscr)
@@ -122,23 +130,22 @@ class NoteScreen(Screen):
         else:
             return 'False'
 
-    def show_cond(self):
-        return
-        r = ''
-        for cond in self.condit:
-            s = ''
-            for i in cond[:]:
-                t = self.cond2str(i)
-                if t is None: continue
-                s += t + ' and '
+    def comment(self):
+        r, n = '(', 0
+        for i in self.rows:
+            if i.xi > n:
+                r = r[:-5] + ') or (' + i.result
+                n = i.xi
+            else:
+                r += i.result
 
-            if s: r += '(' + s[:-5] + ') or '
-        r = r[:-4] if r else 'False'
-        self.note[1][0] = r
-        self.text[0] = r + '\n' + str(self.note[2])
+            r += ' and '
+        r = r[:-5] + ')'
+        self.text[0] = r
         return r
 
     def show_row(self, row):
+        return
         cond = row.cond
         if not cond[0]:
             row.text[0] = 'None'
@@ -177,8 +184,8 @@ class TestApp(App):
         self.note = [ ['sh01', False, False],
                       [],
                       ['False'],
-                      [ [ common.init_cond() ],
-                        [ common.init_cond(), [False, 0, 5, False, 1.0] ]
+                      [ [ common.init_cond(), [False, 0, 5, False, 1.0] ],
+                        [ common.init_cond() ]
                       ]
                     ]
         self.fd = [[False], [self.note]]
