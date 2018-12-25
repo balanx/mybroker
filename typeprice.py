@@ -15,10 +15,8 @@ class TypePrice(BoxLayout):
     def __init__(self, cond, **kwargs):
         self.cond = cond
         if cond[1] != 2:
-            self.cond[1] = 2
-            self.cond[2] = self.sym[0]
-            self.cond[3] = self.sym[-1]
-            self.cond[4] = 1.0
+            del cond[1:]
+            cond.extend([2, self.sym[0], self.sym[-1], 1.0, None])
 
         self.comment()
         super().__init__(**kwargs)
@@ -47,12 +45,12 @@ class TypePrice(BoxLayout):
 
     def comment(self):
         t = str(self.cond[4])
-        #print(self.cond)
         if self.cond[2] != self.sym[0]:
-            r = 'CP ' + self.cond[3] + ' ' +  self.cond[2] + ' * ' + t
+            r = 'Pr ' + self.cond[3] + ' ' +  self.cond[2] + ' * ' + t
         else:
-            r = 'CP ' + self.cond[3] + ' ' +  t
+            r = 'Pr ' + self.cond[3] + ' ' +  t
 
+        self.cond[5] = r
         self.text = [self.cond[2], self.cond[3], r]
         self.text[1] = self.cond[3]
 
