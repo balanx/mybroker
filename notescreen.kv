@@ -4,19 +4,6 @@
 
 #: include condscreen.kv
 
-<NoteSubRow>:
-    size_hint: (1, None)
-    height: app.row_height
-
-    Label:
-        size_hint_x: None
-        width: self.height
-        text: '*'
-
-    Button:
-        text: str(root.text[0])
-        on_release: root.wisb.open_cond(root)
-
 
 <NoteRow>:
     size_hint: (1, None)
@@ -25,12 +12,14 @@
     Button:
         size_hint_x: None
         width: self.height
-        text: '+'
-        on_release: root.wisb.add_subcond(root)
+        text: '+' if root.yi == 0 else '*'
+        disabled: root.yi > 0
+        background_color: (1, 1, 1, 1)  if root.yi == 0 else (1, 1, 1, 0)
+        on_release: root.notescr.add_subcond(root)
 
     Button:
         text: str(root.text[0])
-        on_release: root.wisb.open_cond(root)
+        on_release: root.open_cond()
 
 
 <NoteScreen>:
@@ -47,7 +36,7 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.close_note(); app.save_fd()
+                on_release: root.listscr.close_note(); app.save_fd()
 
             Button:
                 text: '~' if root.note[0][1] else '|'
@@ -62,7 +51,7 @@
                 text: "x"
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.del_note(); app.save_fd()
+                on_release: root.listscr.del_note(); app.save_fd()
 
         BoxLayout:
             size_hint: (1, None)

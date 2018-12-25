@@ -12,29 +12,16 @@ from kivy.properties import ListProperty
 import common, condscreen
 
 
-class NoteSubRow(BoxLayout):
-    text = ListProperty([''])
-    result = ''
-
-    def __init__(self, wisb, xi, yi, **kwargs):
-        self.wisb = wisb
-        self.xi = xi
-        self.yi = yi
-        self.cond = wisb.condit[xi][yi]
-        wisb.show_row(self)
-        super().__init__(**kwargs)
-
-
 class NoteRow(BoxLayout):
     text = ListProperty([''])
     result = ''
-    yi = 0
 
-    def __init__(self, wisb, xi, **kwargs):
-        self.wisb = wisb
-        self.xi = xi
-        self.cond = wisb.condit[xi][0]
-        wisb.show_row(self)
+    def __init__(self, notescr, xi, yi, ri, **kwargs):
+        self.notescr = notescr
+        self.xi, self.yi, self.ri = xi, yi, ri
+        self.condit = notescr.condit
+        self.cond = self.condit[xi][yi]
+        #self.show()
         super().__init__(**kwargs)
 
 
