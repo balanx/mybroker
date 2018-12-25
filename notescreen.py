@@ -24,15 +24,59 @@ class NoteRow(BoxLayout):
         #self.show()
         super().__init__(**kwargs)
 
+    def open_cond(self):
+        self.condscr = condscreen.CondScreen(self, name='cond_screen')
+        sm = self.notescr.manager
+        sm.add_widget(self.condscr)
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'cond_screen'
+
+    def close_cond(self, condscr):
+        self.text[0] = str(self.result)
+        sm = self.notescr.manager
+        sm.transition = SlideTransition(direction='right')
+        sm.current = 'note_screen'
+        sm.remove_widget(condscr)
+        self.show()
+        #self.comment()
+
+    def show(self):
+        cond = self.cond
+        if not cond[0]: # disable
+            self.result = None
+        elif cond[1] == 1:
+            self.result = str(cond[4]) + ' <= 0'
+        elif cond[1] == 2:
+            #d = self.notescr.listscr.quota[self.index]
+            d = [0, [1,2,3,4,5,6]]
+            if len(d) > 1:
+                tm, Pr, Open, Close, Max, Min = d[-1]
+            else:
+                tm, Pr, Open, Close, Max, Min = [0]*6
+
+            Pr = str(Pr)
+            t = ' ~ '
+            if cond[2] == 'Abs':
+                r = Pr + t + str(cond[4])
+            else:
+                base = eval(cond[2])
+                r = Pr + t + str(base) + ' * ' + str(cond[4]) + ' = ' + str(base * cond[4])
+
+            self.result = cond[5] + '\n' + r
+        else: # type = 0
+            self.result = None
+
+        self.text[0] = self.result
+
 
 class NoteScreen(Screen):
     text = ListProperty([''])
     rows = []
 
-    def __init__(self, wisb, **kwargs):
-        self.index = wisb.index
-        self.wisb = wisb
-        self.note = wisb.fd[1][self.index]
+    def __init__(self, listscr, **kwargs):
+        self.index = listscr.index
+        self.listscr = listscr
+        self.note = listscr.fd[1][self.index]
         self.condit = self.note[3]
         super().__init__(**kwargs)
         self.refresh_cond()
@@ -41,16 +85,15 @@ class NoteScreen(Screen):
         self.ids.layout.clear_widgets()
         self.rows.clear()
         # [ False, 'sh01', ['Log'], [condition, ... ] ]
-        xi = 0
+        xi, ri = 0, 0
         for cond in self.condit:
-            self.rows.append(NoteRow(self, xi))
-            self.ids.layout.add_widget(self.rows[-1])
-            if len(cond) > 1: # 1st has done as NoteRow(), other as NoteSubRow()
-                yi = 1
-                for i in cond[1:]:
-                    self.rows.append(NoteSubRow(self, xi, yi))
-                    self.ids.layout.add_widget(self.rows[-1])
-                    yi += 1
+            yi = 0
+            for i in cond:
+                t = NoteRow(self, xi, yi, ri)
+                self.rows.append(t)
+                self.ids.layout.add_widget(t)
+                ri += 1
+                yi += 1
             xi += 1
         self.comment()
 
@@ -64,29 +107,6 @@ class NoteScreen(Screen):
         self.condit[row.xi].append(common.init_cond()) # []
         self.refresh_cond()
 
-    def open_cond(self, row):
-        self.xi = row.xi
-        self.yi = row.yi
-        self.ri = self.rows.index(row)
-        cond = self.condit[self.xi][self.yi]
-        self.condscr = condscreen.CondScreen(self, name='cond_screen')
-        self.manager.add_widget(self.condscr)
-        self.manager.transition = SlideTransition(direction='left')
-        self.manager.current = 'cond_screen'
-
-    def close_cond(self, condscr):
-        if condscr.cond[0] and condscr.cond[1]: # enable and Not 0
-            self.rows[self.ri].result = condscr.type.text[2]
-        else:
-            self.rows[self.ri].result = 'None'
-
-        self.rows[self.ri].text[0] = self.rows[self.ri].result
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'note_screen'
-        self.manager.remove_widget(condscr)
-        #self.rows[self.ri].cond = self.note[self.xi][self.yi]
-        self.show_row(self.rows[self.ri])
-        self.comment()
 
     def del_cond(self, condscr):
         self.close_cond(condscr)
@@ -130,37 +150,6 @@ class NoteScreen(Screen):
         r = r[:-5] + ')'
         self.text[0] = r
         return r
-
-    def show_row(self, row):
-        return
-        cond = row.cond
-        if not cond[0]:
-            row.text[0] = 'None'
-        elif cond[1] == 1:
-            row.text[0] = row.cond[4]
-        elif cond[1] == 2:
-            t = ' > ' if cond[3] else ' < '
-            d = self.wisb.quota[self.index]
-            if len(d) > 1:
-                tm, pr, open, close, max, min = d[-1]
-            else:
-                tm, pr, open, close, max, min = [0]*6
-
-            pr = str(pr)
-            if cond[2] == 2:
-                r = 'P' + t + 'open * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(open) + ' * ' + str(cond[4]) + ' = ' + str(open * cond[4])
-            elif cond[2] == 3:
-                r = 'P' + t + 'close * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(close) + ' * ' + str(cond[4]) + ' = ' + str(close * cond[4])
-            elif cond[2] == 4:
-                r = 'P < ' + 'max * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(max) + ' * ' + str(cond[4]) + ' = ' + str(max * cond[4])
-            elif cond[2] == 5:
-                r = 'P > ' + 'min * ' + str(cond[4]) + '\n' + pr + ' ~ ' + str(min) + ' * ' + str(cond[4]) + ' = ' + str(min * cond[4])
-            else: #if cond[2] == 1:
-                r = 'P' + t + str(cond[4]) + '\n' + pr + ' ~ ' + str(cond[4])
-
-            row.text[0] = r
-        else:
-            row.text[0] = 'None'
 
 
 class TestApp(App):
