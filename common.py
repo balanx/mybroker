@@ -13,27 +13,18 @@ from kivy.properties import BooleanProperty
 
 import datetime as dt
 
+#date = dt.date
+today = dt.date.today()
 oneday = dt.timedelta(days=1)
 #today = dt.datetime.today() + dt.timedelta(hours=8)
-def today():
-    t = dt.datetime.today()
-    w =int2week(t.weekday())
-    return str(t)[:-7] + ' ' + w
 
-def str2date(t):
-    t = t[:-13].split('-')
-    t = dt.date(int(t[0]), int(t[1]), int(t[2]))
-    return t
+def timechk(cond):
+    t = dt.date(*cond[2])
+    limit = t + oneday * cond[3]
+    t = (today - t).days
+    cond[4] = cond[3] - t
+    return str(limit) + '\n' + str(t) + ' : ' + str(cond[4])
 
-def int2week(t):
-    if t == 0: return 'Mon'
-    elif t == 1: return 'Tue'
-    elif t == 2: return 'Wed'
-    elif t == 3: return 'Thu'
-    elif t == 4: return 'Fri'
-    elif t == 5: return 'Sat'
-    elif t == 6: return 'Sun'
-    else: return str(t)
 
 #
 def init_cond():

@@ -5,7 +5,6 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ListProperty
 
-import datetime as dt
 import common
 
 
@@ -17,12 +16,11 @@ class TypeTime(BoxLayout):
 
         if not cond[1] == 1:
             cond[1] = 1
-            cond[2] = common.today()
+            cond[2] = self.date2list(common.today)
             cond[3] = 0
             cond[4] = None
 
-        self.text = [None, cond[2]]
-        self.comment()
+        self.text = [common.timechk(self.cond), str(cond[2])]
         super().__init__(**kwargs)
 
 
@@ -32,17 +30,17 @@ class TypeTime(BoxLayout):
         except:
             self.cond[3] = 0
 
-        self.comment()
+        self.text[0] = common.timechk(self.cond)
 
-    def comment(self):
-        limit = common.str2date(self.cond[2]) + common.oneday * self.cond[3]
-        t1 = (dt.date.today() - common.str2date(self.cond[2])).days
-        self.text[0] = str(limit) + '\n' + str(t1) + ' / ' + str(self.cond[3]-t1)
-        self.cond[4] = self.text[0]
 
     def set_today(self):
-        self.cond[2] = common.today()
-        self.text[1] = self.cond[2]
+        self.cond[2] = self.date2list(common.today)
+        self.text[1] = str(self.cond[2])
+
+    def date2list(self, d):
+        d = str(d)
+        d = [d[:4], d[5:7], d[8:]]
+        return list(map(int, d))
 
 
 #
