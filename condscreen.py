@@ -18,28 +18,28 @@ import common, typeprice, typetime
 
 class TypeDropDown(DropDown):
 
-    def __init__(self, wisb, **kwargs):
+    def __init__(self, condscr, **kwargs):
         super().__init__(**kwargs)
-        self.wisb = wisb
+        self.condscr = condscr
 
     def on_select(self, data):
         self.attach_to.text = data
-        self.wisb.ids.layout.remove_widget(self.wisb.type)
+        self.condscr.ids.layout.remove_widget(self.condscr.type)
 
         if data == 'Price':
-            self.wisb.type = typeprice.TypePrice(self.wisb.cond)
+            self.condscr.type = typeprice.TypePrice(self.condscr.cond)
         else:
-            self.wisb.type = typetime.TypeTime(self.wisb.cond)
+            self.condscr.type = typetime.TypeTime(self.condscr.cond)
 
-        self.wisb.ids.layout.add_widget(self.wisb.type)
+        self.condscr.ids.layout.add_widget(self.condscr.type)
 
 
 class CondScreen(Screen):
     text = ListProperty()
 
-    def __init__(self, wisb, **kwargs):
-        self.wisb = wisb
-        self.cond = wisb.condit[wisb.xi][wisb.yi]
+    def __init__(self, row, **kwargs):
+        self.row = row
+        self.cond = row.condit[row.xi][row.yi]
         self.text = self.cond
         super().__init__(**kwargs)
 
@@ -57,13 +57,6 @@ class CondScreen(Screen):
     def toggle_enable(self, button):
         self.cond[0] = not self.cond[0]
         button.text = "~" if self.cond[0] else '|'
-
-    '''
-    def close_cond(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'note_screen'
-        self.manager.remove_widget(self)
-    '''
 
 
 

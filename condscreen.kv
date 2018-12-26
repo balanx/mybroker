@@ -38,7 +38,7 @@
                 text: "<<"
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.close_cond(root)
+                on_release: root.row.close_cond()
 
             Button:
                 size_hint_x: None
@@ -53,7 +53,7 @@
                 text: "x"
                 size_hint_x: None
                 width: self.height
-                on_release: root.wisb.del_cond(root)
+                on_release: root.row.notescr.del_cond(root.row)
 
         BoxLayout:
             size_hint: (1, None)

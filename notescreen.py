@@ -31,12 +31,12 @@ class NoteRow(BoxLayout):
         sm.transition = SlideTransition(direction='left')
         sm.current = 'cond_screen'
 
-    def close_cond(self, condscr):
+    def close_cond(self):
         self.text[0] = str(self.result)
         sm = self.notescr.manager
         sm.transition = SlideTransition(direction='right')
         sm.current = 'note_screen'
-        sm.remove_widget(condscr)
+        sm.remove_widget(self.condscr)
         self.show()
         self.notescr.comment()
 
@@ -111,11 +111,11 @@ class NoteScreen(Screen):
         self.refresh_cond()
 
 
-    def del_cond(self, condscr):
-        self.close_cond(condscr)
-        del self.condit[self.xi][self.yi]
-        if len(self.condit[self.xi]) == 0:
-            del self.condit[self.xi]
+    def del_cond(self, row):
+        row.close_cond()
+        del self.condit[row.xi][row.yi]
+        if len(self.condit[row.xi]) == 0:
+            del self.condit[row.xi]
         self.refresh_cond()
 
 
