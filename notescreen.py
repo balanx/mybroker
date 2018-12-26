@@ -21,7 +21,7 @@ class NoteRow(BoxLayout):
         self.xi, self.yi, self.ri = xi, yi, ri
         self.condit = notescr.condit
         self.cond = self.condit[xi][yi]
-        #self.show()
+        self.show()
         super().__init__(**kwargs)
 
     def open_cond(self):
@@ -38,17 +38,19 @@ class NoteRow(BoxLayout):
         sm.current = 'note_screen'
         sm.remove_widget(condscr)
         self.show()
-        #self.comment()
+        self.notescr.comment()
 
     def show(self):
         cond = self.cond
         if not cond[0]: # disable
             self.result = None
+            self.text[0] = str(None)
         elif cond[1] == 1:
-            self.result = str(cond[4]) + ' <= 0'
+            self.result = str(False) if cond[4] > 0 else str(True)
+            self.text[0] = common.timechk(cond)
         elif cond[1] == 2:
-            #d = self.notescr.listscr.quota[self.index]
-            d = [0, [1,2,3,4,5,6]]
+            d = self.notescr.listscr.quota[self.index]
+            #d = [0, [1,2,3,4,5,6]]
             if len(d) > 1:
                 tm, Pr, Open, Close, Max, Min = d[-1]
             else:
@@ -62,11 +64,12 @@ class NoteRow(BoxLayout):
                 base = eval(cond[2])
                 r = Pr + t + str(base) + ' * ' + str(cond[4]) + ' = ' + str(base * cond[4])
 
-            self.result = cond[5] + '\n' + r
+            self.result = cond[5]
+            self.text[0] = self.result + '\n' + r
         else: # type = 0
             self.result = None
+            self.text[0] = str(None)
 
-        self.text[0] = self.result
 
 
 class NoteScreen(Screen):
@@ -140,11 +143,13 @@ class NoteScreen(Screen):
     def comment(self):
         r, n = '(', 0
         for i in self.rows:
-            if i.xi > n:
-                r = r[:-5] + ') or (' + i.result
+            t = i.result
+            if t == None: continue
+            if i.xi > n and len(r) > 1: # Not ') or (' if previous None
+                r = r[:-5] + ') or (' + t
                 n = i.xi
             else:
-                r += i.result
+                r += t
 
             r += ' and '
         r = r[:-5] + ')'
