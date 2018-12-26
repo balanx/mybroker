@@ -113,16 +113,17 @@ class ListScreen(Screen):
         soundon = False
         for i in range(len(self.quota)):
             mq = self.quota[i][-1] # minites quotation
-            #print(mq)
+            #print('==q==', self.quota, mq)
             if len(mq) == 1 or not self.rows[i].note[0][1]: continue
             self.rows[i].show(mq)
             if self.rows[i].note[0][2]: soundon = True
             t = self.fd[1][i]
+            tm, Pr, Open, Close, Max, Min = mq
             if mq[0] != 0:
                 if not eval(t[1][0]) if (len(t[2]) % 2) else eval(t[1][0]):
                     t[2].append(mq[0])
-                    self.app.save_fd()
                     self.rows[i].note[0][2] = True
+                    self.app.save_fd()
                     soundon = True
 
         #print('rounds ...', mq)

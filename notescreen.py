@@ -49,8 +49,9 @@ class NoteRow(BoxLayout):
             self.result = str(False) if cond[4] > 0 else str(True)
             self.text[0] = common.timechk(cond)
         elif cond[1] == 2:
-            #d = self.notescr.listscr.quota[self.index]
-            d = [0, [1,2,3,4,5,6]]
+            d = self.notescr.listscr.quota[self.notescr.index]
+            #print('====', self.notescr.index, d)
+            #d = [0, [1,2,3,4,5,6]]
             if len(d) > 1:
                 tm, Pr, Open, Close, Max, Min = d[-1]
             else:
@@ -132,7 +133,8 @@ class NoteScreen(Screen):
             r += ' and '
 
         r = str(False) if len(r) == 0 else '(' + r[:-5] + ')'
-        self.text[0] = r
+        self.note[1] = [r]
+        self.text[0] = r + '\n' + str(self.note[2])
         return r
 
 
