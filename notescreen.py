@@ -110,7 +110,6 @@ class NoteScreen(Screen):
         self.condit[row.xi].append(common.init_cond()) # []
         self.refresh_cond()
 
-
     def del_cond(self, row):
         row.close_cond()
         del self.condit[row.xi][row.yi]
@@ -118,41 +117,20 @@ class NoteScreen(Screen):
             del self.condit[row.xi]
         self.refresh_cond()
 
-
-    def cond2str(self, subcond):
-        if not subcond[0]: return None
-        if subcond[1] == 1: # time
-            return '(common.str2date(common.today()) - common.str2date("' + subcond[2] + '")).days > ' + str(subcond[3])
-        elif subcond[1] == 2: # price
-            t = ' > ' if subcond[3] else ' < '
-            if subcond[2] == 1:
-                return 'mq[1]' + t + str(subcond[4])
-            elif subcond[2] == 2:
-                return 'mq[1]' + t + 'mq[2]*' + str(subcond[4])
-            elif subcond[2] == 3:
-                return 'mq[1]' + t + 'mq[3]*' + str(subcond[4])
-            elif subcond[2] == 4:
-                return 'mq[1] < ' + 'mq[4]*' + str(subcond[4])
-            elif subcond[2] == 5:
-                return 'mq[1] > ' + 'mq[5]*' + str(subcond[4])
-            else:
-                return 'False'
-        else:
-            return 'False'
-
     def comment(self):
-        r, n = '(', 0
+        r, n = '', 0
         for i in self.rows:
             t = i.result
             if t == None: continue
-            if i.xi > n and len(r) > 1: # Not ') or (' if previous None
+            if i.xi > n and len(r) > 0: # Not ') or (' if previous None
                 r = r[:-5] + ') or (' + t
                 n = i.xi
             else:
                 r += t
 
             r += ' and '
-        r = r[:-5] + ')'
+
+        r = str(False) if len(r) == 0 else '(' + r[:-5] + ')'
         self.text[0] = r
         return r
 
