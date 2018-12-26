@@ -49,8 +49,8 @@ class NoteRow(BoxLayout):
             self.result = str(False) if cond[4] > 0 else str(True)
             self.text[0] = common.timechk(cond)
         elif cond[1] == 2:
-            d = self.notescr.listscr.quota[self.index]
-            #d = [0, [1,2,3,4,5,6]]
+            #d = self.notescr.listscr.quota[self.index]
+            d = [0, [1,2,3,4,5,6]]
             if len(d) > 1:
                 tm, Pr, Open, Close, Max, Min = d[-1]
             else:
@@ -100,10 +100,11 @@ class NoteScreen(Screen):
             xi += 1
         self.comment()
 
-    def add_cond(self, cond=None):
+    def add_cond(self):
         xi = len(self.condit)
+        ri = len(self.rows)
         self.condit.append([common.init_cond()]) # [[]]
-        self.rows.append(NoteRow(self, xi))
+        self.rows.append(NoteRow(self, xi, 0, ri))
         self.ids.layout.add_widget(self.rows[-1])
 
     def add_subcond(self, row):
