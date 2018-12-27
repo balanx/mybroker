@@ -91,7 +91,8 @@ class ListScreen(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.notescr)
-        self.rows[self.index].note = self.fd[1][self.index]
+        #print('close:', self.rows[self.index].note, self.fd[1][self.index])
+        #self.rows[self.index].note = self.fd[1][self.index]
         self.rows[self.index].show()
 
     def del_note(self):

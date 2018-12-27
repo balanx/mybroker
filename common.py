@@ -31,9 +31,13 @@ def init_cond():
     return [False, 0, None, None, None]
 
 def init_note():
-    #               enable  history   debug     Log    condit
-    return [['sh01', False, False], ['eval()'], [ ], [[init_cond()]] ]
-    # condit = [ [c1 and c2 and ... ] or [] or ... ]
+    #                enable, history
+    return [ [ 'sh01', False, False ],
+             [ 'eval()', [[0]*6] ], # debug, quota
+             [ ], # log
+             [ [ init_cond() ] ] # condit = [ [c1 and c2 and ... ] or [] or ... ]
+           ]
+
 
 #     interval
 # fd = [[3], []]
