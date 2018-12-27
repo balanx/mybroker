@@ -110,7 +110,7 @@ class ListScreen(Screen):
             t += i[0][0] + ','
             self.codes = t[:-1]
 
-    def rounds(self, dt=None):
+    def rounds(self, dt):
         if not self.rows: return
 
         quota = self.mints.get_one(self.codes)
@@ -133,7 +133,7 @@ class ListScreen(Screen):
             self.rows[i].show()
             if self.rows[i].note[0][2]: history = True
 
-        #print('rounds ...', mq)
+        print('rounds ...', dt)
         if history and self.sound.state == 'stop' and not self.mute:
             self.sound.play()
 
