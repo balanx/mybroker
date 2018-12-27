@@ -67,13 +67,16 @@ class minites_data():
 
         return f
 
-    def get_one( self, n ) :
+    def get_one( self, codes ) :
 
-        r = self.grab( n )
+        r = self.grab( codes )
         #print('==r==', r)
-        f = self.arrange(r[0])
+        t = []
+        for i in range(len(r)):
+            f = self.arrange(r[i])
+            t.append(f)
 
-        return f[1:]
+        return t
 
 
     def gets( self, select, data ) :
@@ -99,6 +102,7 @@ if __name__ == '__main__':
     d = minites_data()
 
     select = 'n1,sh000001,n2,sz399006,n3'
+    '''
     #select = 'sh000001,sz399006'
     #result = [[['sh000001']], [['sz399006']]]
     result = [[['n1']], [['sh000001']], [['n2']], [['sz399006']], [['n3']]]
@@ -109,9 +113,8 @@ if __name__ == '__main__':
     d.gets(select, result)
     print( result )
     '''
-    result = d.get_one('sh000001')
+    result = d.get_one(select)
     print( result )
-    '''
 
 
 

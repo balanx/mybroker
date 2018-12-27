@@ -51,10 +51,10 @@ class NoteRow(BoxLayout):
         elif cond[1] == 2:
             #print('====', self.notescr.note)
             d = self.notescr.note[1][1]
-            d = [[1,2,3,4,5,6]]
+            #d = [[1,2,3,4,5,6]]
             tm, Pr, Open, Close, Max, Min = d[-1]
             if cond[2] == 'Abs':
-                r = 'Abs = ' + str(cond[4])
+                r = cond[2]
             else:
                 base = eval(cond[2])
                 r = str(base) + ' * ' + str(cond[4]) + ' = ' + str(base * cond[4])
@@ -127,7 +127,7 @@ class NoteScreen(Screen):
             r += ' and '
 
         r = str(False) if len(r) == 0 else '(' + r[:-5] + ')'
-        self.note[1][0] = [r]
+        self.note[1][0] = r
         self.text[0] = r + '\n' + str(self.note[2])
         return r
 

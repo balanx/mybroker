@@ -52,6 +52,7 @@ class ListScreen(Screen):
     online = False
     sound = SoundLoader.load('./19.wav')
     mute = True
+    codes = ''
     text = ListProperty([online]) # online_symbol
 
     def __init__(self, wisb, **kwargs):
@@ -60,7 +61,6 @@ class ListScreen(Screen):
         super().__init__(**kwargs)
         self.refresh_list()
         #
-        self.quota = [[[''],[0]*6]] * len(self.rows)
         self.event = Clock.schedule_once(self.rounds)
 
 
@@ -75,6 +75,7 @@ class ListScreen(Screen):
             self.fd[1].append(common.init_note())
         self.rows.append(ListRow(self, len(self.rows)))
         self.ids.layout.add_widget(self.rows[-1])
+        self.get_codes()
 
     def open_note(self, row):
         self.index = row.index
@@ -94,38 +95,42 @@ class ListScreen(Screen):
         #print('close:', self.rows[self.index].note, self.fd[1][self.index])
         #self.rows[self.index].note = self.fd[1][self.index]
         self.rows[self.index].show()
+        self.get_codes()
 
     def del_note(self):
         self.close_note()
         del self.fd[1][self.index]
         self.refresh_list()
 
-    def rounds(self, dt=None):
-        #select = 'sh000001,sz399006'
-        if not self.rows: return
-        codes = ''
-        self.quota = []
-        for i in self.rows:
-            t = i.note[0][0]
-            codes += t + ','
-            self.quota.append([[t]])
+    def get_codes(self):
+        #codes = 'sh000001,sz399006'
+        t = ''
+        for i in self.fd[1]:
+            t += i[0][0] + ','
+            self.codes = t[:-1]
 
-        self.mints.gets(codes[:-1], self.quota)
+    def rounds(self, dt=None):
+        if not self.rows: return
+
+        quota = self.mints.get_one(self.codes)
         history = False
-        for i in range(len(self.quota)):
-            mq = self.quota[i][-1] # minites quotation
-            #print('==q==', self.quota, mq)
-            if len(mq) == 1 or not self.rows[i].note[0][1]: continue
-            self.rows[i].show(mq)
-            if self.rows[i].note[0][2]: history = True
+        for i in range(len(quota)):
+            name = quota[i][0]
+            mq = quota[i][1:] # minites quotation
             t = self.fd[1][i]
+            #print('==q==', t, mq)
+            if name != t[0][0]: continue
             tm, Pr, Open, Close, Max, Min = mq
+            t[1][1][-1] = mq
             if mq[0] != 0:
                 if not eval(t[1][0]) if (len(t[2]) % 2) else eval(t[1][0]):
-                    t[2].append(mq[0])
-                    self.rows[i].note[0][2] = True
+                    t[2].append(mq[0]) # Log
+                    self.rows[i].note[0][2] = True # history
                     self.app.save_fd()
                     history = True
+
+            self.rows[i].show(mq)
+            if self.rows[i].note[0][2]: history = True
 
         #print('rounds ...', mq)
         if history and self.sound.state == 'stop' and not self.mute:
