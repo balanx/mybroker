@@ -51,21 +51,16 @@ class NoteRow(BoxLayout):
         elif cond[1] == 2:
             #print('====', self.notescr.note)
             d = self.notescr.note[1][1]
-            if len(d) > 1:
-                tm, Pr, Open, Close, Max, Min = d[-1]
-            else:
-                tm, Pr, Open, Close, Max, Min = [0]*6
-
-            Pr = str(Pr)
-            t = ' ~ '
+            d = [[1,2,3,4,5,6]]
+            tm, Pr, Open, Close, Max, Min = d[-1]
             if cond[2] == 'Abs':
-                r = Pr + t + str(cond[4])
+                r = 'Abs = ' + str(cond[4])
             else:
                 base = eval(cond[2])
-                r = Pr + t + str(base) + ' * ' + str(cond[4]) + ' = ' + str(base * cond[4])
+                r = str(base) + ' * ' + str(cond[4]) + ' = ' + str(base * cond[4])
 
             self.result = cond[5]
-            self.text[0] = self.result + '\n' + r
+            self.text[0] = str(Pr) + self.result[2:] + '\n' + r
         else: # type = 0
             self.result = None
             self.text[0] = str(None)
@@ -143,8 +138,8 @@ class TestApp(App):
         self.row_height = Window.height / 10
         self.row_space = 10
         self.note = [ ['sh01', False, False],
+                      [ 'eval()', [[0]*6] ], # debug, quota
                       [],
-                      ['False'],
                       [ [ common.init_cond(), [False, 0, 5, False, 1.0] ],
                         [ common.init_cond() ]
                       ]
