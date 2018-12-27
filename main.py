@@ -35,7 +35,8 @@ class ListRow(BoxLayout):
         d = 100*(d1-d2)/d2
         return common.reso1(d)
 
-    def show(self, data=[0]*6):
+    def show(self):
+        data = self.note[1][1][-1]
         self.text[0] = self.note[0][0] + '\n' + common.reso1(data[2]) + '\n' + self.format(data[2], data[3]) + '%'
         self.text[1] = common.reso1(data[1]) + '\n' + self.format(data[1], data[3]) + '%'
         self.text[2] = common.reso1(data[4]) + '\n' + self.format(data[4], data[3]) + '%'
@@ -129,7 +130,7 @@ class ListScreen(Screen):
                     self.app.save_fd()
                     history = True
 
-            self.rows[i].show(mq)
+            self.rows[i].show()
             if self.rows[i].note[0][2]: history = True
 
         #print('rounds ...', mq)

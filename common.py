@@ -31,8 +31,8 @@ def init_cond():
     return [False, 0]
 
 def init_note():
-    #                enable, history
-    return [ [ 'sh01', False, False ],
+    #                     enable  history
+    return [ [ 'sh000001', False, False ],
              [ 'eval()', [[0]*6] ], # debug, quota
              [ ], # log
              [ [ init_cond() ] ] # condit = [ [c1 and c2 and ... ] or [] or ... ]
