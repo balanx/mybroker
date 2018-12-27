@@ -28,7 +28,7 @@ def timechk(cond):
 
 #
 def init_cond():
-    return [False, 0, None, None, None]
+    return [False, 0]
 
 def init_note():
     #                enable, history

@@ -14,11 +14,10 @@ class TypeTime(BoxLayout):
     def __init__(self, cond, **kwargs):
         self.cond = cond
 
-        if not cond[1] == 1:
-            cond[1] = 1
-            cond[2] = self.date2list(common.today)
-            cond[3] = 0
-            cond[4] = None
+        if cond[1] != 1:
+            del cond[1:]
+            #                  start                  limit  remain
+            cond.extend([1, self.date2list(common.today), 0, 0])
 
         self.text = [common.timechk(self.cond), str(cond[2])]
         super().__init__(**kwargs)
