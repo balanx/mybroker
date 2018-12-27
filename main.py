@@ -110,13 +110,13 @@ class ListScreen(Screen):
             self.quota.append([[t]])
 
         self.mints.gets(codes[:-1], self.quota)
-        soundon = False
+        history = False
         for i in range(len(self.quota)):
             mq = self.quota[i][-1] # minites quotation
             #print('==q==', self.quota, mq)
             if len(mq) == 1 or not self.rows[i].note[0][1]: continue
             self.rows[i].show(mq)
-            if self.rows[i].note[0][2]: soundon = True
+            if self.rows[i].note[0][2]: history = True
             t = self.fd[1][i]
             tm, Pr, Open, Close, Max, Min = mq
             if mq[0] != 0:
@@ -124,10 +124,10 @@ class ListScreen(Screen):
                     t[2].append(mq[0])
                     self.rows[i].note[0][2] = True
                     self.app.save_fd()
-                    soundon = True
+                    history = True
 
         #print('rounds ...', mq)
-        if soundon and self.sound.state == 'stop' and not self.mute:
+        if history and self.sound.state == 'stop' and not self.mute:
             self.sound.play()
 
     def open_setting(self):
