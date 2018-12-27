@@ -23,10 +23,10 @@ import common, notescreen, settingscreen, stock
 class ListRow(BoxLayout):
     text = ListProperty(['']*5)
 
-    def __init__(self, wisb, index, **kwargs):
-        self.wisb = wisb
+    def __init__(self, listscr, index, **kwargs):
+        self.listscr = listscr
         self.index = index
-        self.note = wisb.fd[1][index]
+        self.note = listscr.fd[1][index]
         super().__init__(**kwargs)
         self.show()
 
@@ -55,9 +55,9 @@ class ListScreen(Screen):
     codes = ''
     text = ListProperty([online]) # online_symbol
 
-    def __init__(self, wisb, **kwargs):
-        self.app = wisb
-        self.fd = wisb.fd
+    def __init__(self, app, **kwargs):
+        self.app = app
+        self.fd = app.fd
         super().__init__(**kwargs)
         self.refresh_list()
         #
