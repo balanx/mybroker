@@ -33,13 +33,13 @@ class ListRow(BoxLayout):
     def format(self, d1, d2):
         if not d2: return '0'
         d = 100*(d1-d2)/d2
-        return ('%.2f' % d)
+        return common.reso1(d)
 
     def show(self, data=[0]*6):
-        self.text[0] = self.note[0][0] + '\n' + ('%.2f' % data[2]) + '\n' + self.format(data[2], data[3]) + '%'
-        self.text[1] = ('%.2f' % data[1]) + '\n' + self.format(data[1], data[3]) + '%'
-        self.text[2] = ('%.2f' % data[4]) + '\n' + self.format(data[4], data[3]) + '%'
-        self.text[3] = ('%.2f' % data[5]) + '\n' + self.format(data[5], data[3]) + '%'
+        self.text[0] = self.note[0][0] + '\n' + common.reso1(data[2]) + '\n' + self.format(data[2], data[3]) + '%'
+        self.text[1] = common.reso1(data[1]) + '\n' + self.format(data[1], data[3]) + '%'
+        self.text[2] = common.reso1(data[4]) + '\n' + self.format(data[4], data[3]) + '%'
+        self.text[3] = common.reso1(data[5]) + '\n' + self.format(data[5], data[3]) + '%'
         if not self.note[0][1]:
             self.text[4] = 'None'
         else:

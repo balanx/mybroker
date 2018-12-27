@@ -50,6 +50,11 @@ def init_note():
 #
 # [[[''],[0]*6]] * n
 
+
+def reso1(d): return ('%.2f' % d)
+def reso2(d): return ('%.3f' % d)
+
+
 class ConfirmPopup(Popup):
     result = BooleanProperty(False)
 

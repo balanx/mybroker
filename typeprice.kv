@@ -2,6 +2,7 @@
 # Copyright (C) 2018 tobalanx@qq.com
 #
 
+#: import common common
 
 <TypePrice>:
     orientation: 'vertical'
@@ -79,7 +80,7 @@
             text: 'Value'
 
         TextInput:
-            text: ('%.2f' % root.cond[4])
+            text: common.reso2(root.cond[4])
             on_text: root.on_text_val(self.text)
 
     Label:
