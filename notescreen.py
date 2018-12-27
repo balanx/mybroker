@@ -57,10 +57,10 @@ class NoteRow(BoxLayout):
                 r = cond[2]
             else:
                 base = eval(cond[2])
-                r = str(base) + ' * ' + str(cond[4]) + ' = ' + str(base * cond[4])
+                r = ('%.2f' % base) + ' * ' + ('%.2f' % cond[4]) + ' = ' + ('%.2f' % (base * cond[4]))
 
             self.result = cond[5]
-            self.text[0] = str(Pr) + self.result[2:] + '\n' + r
+            self.text[0] = ('%.2f' % Pr) + self.result[2:] + '\n' + r
         else: # type = 0
             self.result = None
             self.text[0] = str(None)

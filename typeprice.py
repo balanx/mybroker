@@ -44,7 +44,7 @@ class TypePrice(BoxLayout):
         self.comment()
 
     def comment(self):
-        t = str(self.cond[4])
+        t = ('%.2f' % self.cond[4])
         if self.cond[2] != self.sym[0]:
             r = 'Pr ' + self.cond[3] + ' ' +  self.cond[2] + ' * ' + t
         else:

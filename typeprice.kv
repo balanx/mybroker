@@ -79,7 +79,7 @@
             text: 'Value'
 
         TextInput:
-            text: str(root.cond[4])
+            text: ('%.2f' % root.cond[4])
             on_text: root.on_text_val(self.text)
 
     Label:
