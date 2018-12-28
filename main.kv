@@ -64,8 +64,8 @@
                 #color: (1, 1, 1, 1)
                 #background_color: (.3, .3, .3, 1)
                 on_touch_down:
-                    root.trig_once = True
-                    root.event = Clock.schedule_once(root.rounds)
+                    #root.trig_once = True
+                    root.rounds(0)
 
             Button:
                 text: '+'

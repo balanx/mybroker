@@ -50,10 +50,11 @@ class ListRow(BoxLayout):
 class ListScreen(Screen):
     rows = []
     mints = stock.minites_data()
-    online = False
+    online = True
     sound = SoundLoader.load('./19.wav')
     mute = True
     codes = ''
+    #trig_once = False
     text = ListProperty([online]) # online_symbol
 
     def __init__(self, app, **kwargs):
@@ -62,8 +63,8 @@ class ListScreen(Screen):
         super().__init__(**kwargs)
         self.refresh_list()
         #
-        self.trig_once = True
-        self.event = Clock.schedule_once(self.rounds)
+        interval = self.fd[0][0]
+        self.event = Clock.schedule_interval(self.rounds, interval)
 
 
     def refresh_list(self):
@@ -114,11 +115,14 @@ class ListScreen(Screen):
     def rounds(self, dt):
         if not self.rows: return
         now = common.dt.datetime.now()
-        if ( (now.hour <= 9  and now.minute < 25) or \
+        if (  now.hour <= 8  or \
+             (now.hour == 9  and now.minute < 25) or \
              (now.hour == 11 and now.minute > 30) or \
               now.hour == 12 or \
               now.hour >= 15    \
-           ) and not self.trig_once: return
+           ) and \
+           dt: # dt = 0, trigger once
+            return
 
         quota = self.mints.get_one(self.codes)
         history = False
@@ -141,7 +145,9 @@ class ListScreen(Screen):
             if self.rows[i].note[0][2]: history = True
 
         print('rounds ...', now)
-        self.trig_once = False
+        #self.trig_once = False
+        #if not self.online:
+        #    self.event.cancel()
         if history and self.sound.state == 'stop' and not self.mute:
             self.sound.play()
 
@@ -157,8 +163,7 @@ class ListScreen(Screen):
         self.manager.remove_widget(self.settingscr)
         interval = self.fd[0][0]
         self.text[0] = self.online
-        if self.event.is_triggered:
-            self.event.cancel()
+        self.event.cancel()
         if self.online:
             self.event = Clock.schedule_interval(self.rounds, interval)
 
