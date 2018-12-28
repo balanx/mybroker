@@ -51,7 +51,7 @@ class ListScreen(Screen):
     rows = []
     mints = stock.minites_data()
     #online = True
-    sound = SoundLoader.load('./19.wav')
+    sound = SoundLoader.load('./1.wav')
     mute = True
     codes = ''
     #trig_once = False
