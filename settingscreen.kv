@@ -20,12 +20,12 @@
                 on_release: root.listscr.close_setting(); app.save_fd()
 
             Button:
-                text: '~' if root.listscr.online else '|'
+                text: '~' if app.fd[0][1] else '|'
                 size_hint_x: None
                 width: self.height
                 on_release:
-                    root.listscr.online = not root.listscr.online
-                    self.text = '~' if root.listscr.online else '|'
+                    app.fd[0][1] = not app.fd[0][1]
+                    self.text = '~' if app.fd[0][1] else '|'
 
             Label:
                 text: 'Setting'

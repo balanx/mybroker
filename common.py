@@ -39,9 +39,9 @@ def init_note():
            ]
 
 
-#     interval
-# fd = [[3], []]
-#    = [[3], [n1, n2, ...]]
+#  interval online
+# fd = [[3, True], []]
+#    = [[3, True], [n1, n2, ...]]
 #
 
 #

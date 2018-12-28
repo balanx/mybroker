@@ -50,21 +50,24 @@ class ListRow(BoxLayout):
 class ListScreen(Screen):
     rows = []
     mints = stock.minites_data()
-    online = True
+    #online = True
     sound = SoundLoader.load('./19.wav')
     mute = True
     codes = ''
     #trig_once = False
-    text = ListProperty([online]) # online_symbol
+    text = ListProperty() # online_symbol
 
     def __init__(self, app, **kwargs):
         self.app = app
         self.fd = app.fd
+        self.text.append(self.fd[0][1]) # online
         super().__init__(**kwargs)
         self.refresh_list()
         #
         interval = self.fd[0][0]
         self.event = Clock.schedule_interval(self.rounds, interval)
+        if not self.text[0]: # online
+            self.event.cancel()
 
 
     def refresh_list(self):
@@ -161,10 +164,10 @@ class ListScreen(Screen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'list_screen'
         self.manager.remove_widget(self.settingscr)
-        interval = self.fd[0][0]
-        self.text[0] = self.online
+        self.text[0] = self.fd[0][1] # online
         self.event.cancel()
-        if self.online:
+        if self.text[0]: # online
+            interval = self.fd[0][0]
             self.event = Clock.schedule_interval(self.rounds, interval)
 
 
@@ -195,7 +198,7 @@ class MainApp(App):
             self.fn = './' + self.fn
 
         if not exists(self.fn):
-            return [[3.0], []]
+            return [[3.0, True], []]
         with open(self.fn) as fd:
             return json.load(fd)
 
