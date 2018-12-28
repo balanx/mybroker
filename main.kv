@@ -63,7 +63,9 @@
                 text: 'MyBroker'
                 #color: (1, 1, 1, 1)
                 #background_color: (.3, .3, .3, 1)
-                on_touch_down: Clock.schedule_once(root.rounds)
+                on_touch_down:
+                    root.trig_once = True
+                    root.event = Clock.schedule_once(root.rounds)
 
             Button:
                 text: '+'

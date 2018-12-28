@@ -62,6 +62,7 @@ class ListScreen(Screen):
         super().__init__(**kwargs)
         self.refresh_list()
         #
+        self.trig_once = True
         self.event = Clock.schedule_once(self.rounds)
 
 
@@ -112,6 +113,12 @@ class ListScreen(Screen):
 
     def rounds(self, dt):
         if not self.rows: return
+        now = common.dt.datetime.now()
+        if ( (now.hour <= 9  and now.minute < 25) or \
+             (now.hour == 11 and now.minute > 30) or \
+              now.hour == 12 or \
+              now.hour >= 15    \
+           ) and not self.trig_once: return
 
         quota = self.mints.get_one(self.codes)
         history = False
@@ -133,7 +140,8 @@ class ListScreen(Screen):
             self.rows[i].show()
             if self.rows[i].note[0][2]: history = True
 
-        print('rounds ...', dt)
+        print('rounds ...', now)
+        self.trig_once = False
         if history and self.sound.state == 'stop' and not self.mute:
             self.sound.play()
 
