@@ -144,7 +144,7 @@ class ListScreen(Screen):
             self.rows[i].show()
             if self.rows[i].note[0][2]: history = True
 
-        print('rounds ...', now)
+        print('rounds ...', now, mq)
         #self.trig_once = False
         #if not self.online:
         #    self.event.cancel()

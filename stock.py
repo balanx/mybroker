@@ -22,8 +22,12 @@ class minites_data():
 
         try :
             resp = requests.get(minites_data.server + codes,
+                                timeout=0.5, # second
                                 proxies=minites_data.proxies,
                                 headers=minites_data.headers)
+        except ReadTimeout :
+            print("Error : requests() timeout")
+            return [[0] * 9]
         except :
             print("Error : grabbing() : failed at requests.get(server, , ,)")
             return [[0] * 9]
